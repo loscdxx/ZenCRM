@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block title %}About Us - CRM System{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>About Us</h1>
+</div>
+
+<div class="content-section">
+    <h2>Our Story</h2>
+    <p>CRM System was founded in 2020 with a simple mission: to help businesses build better relationships with their customers. We believe that customer relationships are the foundation of business success, and our platform is designed to make managing those relationships as easy and effective as possible.</p>
+    
+    <h2>Our Mission</h2>
+    <p>Our mission is to provide businesses of all sizes with the tools they need to understand, engage, and delight their customers. We're committed to building a CRM that's powerful enough for enterprise needs but simple enough for small businesses to use effectively.</p>
+    
+    <h2>Our Team</h2>
+    <div class="team-grid">
+        <div class="team-member">
+            <img src="{{ url_for('static', filename='images/team/john-doe.jpg') }}" alt="John Doe" class="team-photo">
+            <h3>John Doe</h3>
+            <p class="team-role">CEO & Co-Founder</p>
+            <p>John has over 15 years of experience in software development and customer relationship management.</p>
+        </div>
+        
+        <div class="team-member">
+            <img src="{{ url_for('static', filename='images/team/jane-smith.jpg') }}" alt="Jane Smith" class="team-photo">
+            <h3>Jane Smith</h3>
+            <p class="team-role">CTO & Co-Founder</p>
+            <p>Jane is a software architect with a passion for building user-friendly, scalable applications.</p>
+        </div>
+        
+        <div class="team-member">
+            <img src="{{ url_for('static', filename='images/team/michael-johnson.jpg') }}" alt="Michael Johnson" class="team-photo">
+            <h3>Michael Johnson</h3>
+            <p class="team-role">Head of Product</p>
+            <p>Michael leads our product team, ensuring that CRM System meets the needs of our diverse user base.</p>
+        </div>
+        
+        <div class="team-member">
+            <img src="{{ url_for('static', filename='images/team/sarah-williams.jpg') }}" alt="Sarah Williams" class="team-photo">
+            <h3>Sarah Williams</h3>
+            <p class="team-role">Head of Customer Success</p>
+            <p>Sarah and her team are dedicated to helping our customers get the most out of CRM System.</p>
+        </div>
+    </div>
+    
+    <h2>Our Values</h2>
+    <div class="values-grid">
+        <div class="value-item">
+            <h3>Customer First</h3>
+            <p>We put our customers at the center of everything we do, from product development to support.</p>
+        </div>
+        
+        <div class="value-item">
+            <h3>Simplicity</h3>
+            <p>We believe that software should be intuitive and easy to use, without sacrificing power or flexibility.</p>
+        </div>
+        
+        <div class="value-item">
+            <h3>Continuous Improvement</h3>
+            <p>We're always looking for ways to make our product better and more valuable for our customers.</p>
+        </div>
+        
+        <div class="value-item">
+            <h3>Transparency</h3>
+            <p>We believe in open communication with our customers, partners, and team members.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

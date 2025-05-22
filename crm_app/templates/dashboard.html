@@ -1,0 +1,398 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - ZenCRM{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="dashboard">
+        <h1 class="page-title">Dashboard</h1>
+        
+        <!-- Stats Cards -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="stat-content">
+                    <h3 class="stat-value">{{ stats.total_customers }}</h3>
+                    <p class="stat-label">Total Customers</p>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-handshake"></i>
+                </div>
+                <div class="stat-content">
+                    <h3 class="stat-value">{{ stats.active_deals }}</h3>
+                    <p class="stat-label">Active Deals</p>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div class="stat-content">
+                    <h3 class="stat-value">{{ stats.closed_deals_month }}</h3>
+                    <p class="stat-label">Deals Closed This Month</p>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-dollar-sign"></i>
+                </div>
+                <div class="stat-content">
+                    <h3 class="stat-value">${{ stats.revenue_month }}</h3>
+                    <p class="stat-label">Revenue This Month</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Pipeline Section -->
+        <div class="dashboard-section">
+            <div class="section-header">
+                <h2 class="section-title">Sales Pipeline</h2>
+                <a href="{{ url_for('deals.list') }}" class="btn btn-secondary btn-sm">
+                    View All Deals
+                </a>
+            </div>
+            
+            <div class="pipeline">
+                {% for stage in pipeline_stages %}
+                <div class="pipeline-stage">
+                    <div class="stage-header">
+                        <h3 class="stage-name">{{ stage.name }}</h3>
+                        <div class="stage-stats">
+                            <span class="stage-count">{{ stage.count }} deals</span>
+                            <span class="stage-value">${{ stage.value }}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="stage-deals">
+                        {% for deal in stage.deals %}
+                        <div class="deal-card">
+                            <h4 class="deal-name">
+                                <a href="{{ url_for('deals.view', id=deal.id) }}">{{ deal.name }}</a>
+                            </h4>
+                            <p class="deal-customer">
+                                <a href="{{ url_for('customers.view', id=deal.customer_id) }}">{{ deal.customer_name }}</a>
+                            </p>
+                            <p class="deal-value">${{ deal.value }}</p>
+                        </div>
+                        {% endfor %}
+                        
+                        {% if stage.count > stage.deals|length %}
+                        <div class="more-deals">
+                            <a href="{{ url_for('deals.list') }}">
+                                + {{ stage.count - stage.deals|length }} more
+                            </a>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <!-- Recent Activities Section -->
+        <div class="dashboard-section">
+            <div class="section-header">
+                <h2 class="section-title">Recent Activities</h2>
+            </div>
+            
+            <div class="activities">
+                {% for activity in recent_activities %}
+                <div class="activity-card">
+                    <div class="activity-date">{{ activity.date }}</div>
+                    <div class="activity-content">
+                        <div class="activity-description">
+                            <span class="activity-badge badge-{{ activity.status_color }}">{{ activity.status }}</span>
+                            {{ activity.description }}
+                        </div>
+                        <div class="activity-details">
+                            <a href="{{ url_for('deals.view', id=activity.deal_id) }}">{{ activity.deal_name }}</a> - 
+                            <a href="{{ url_for('customers.view', id=activity.customer_id) }}">{{ activity.customer_name }}</a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block styles %}
+<style>
+    body {
+        padding-top: 4rem;
+    }
+    
+    .dashboard {
+        padding: 2rem 0;
+    }
+    
+    .page-title {
+        font-size: 2.5rem;
+        margin-bottom: 2rem;
+        background: linear-gradient(135deg, var(--accent-purple-light), var(--accent-blue));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+    
+    /* Stats Grid */
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 3rem;
+    }
+    
+    .stat-card {
+        background-color: rgba(10, 10, 20, 0.5);
+        border-radius: 12px;
+        padding: 1.5rem;
+        display: flex;
+        align-items: center;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+    }
+    
+    .stat-icon {
+        font-size: 2rem;
+        margin-right: 1.5rem;
+        width: 50px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+    
+    .stat-content {
+        flex: 1;
+    }
+    
+    .stat-value {
+        font-size: 1.75rem;
+        font-weight: 700;
+        margin: 0;
+        color: var(--primary-light);
+    }
+    
+    .stat-label {
+        font-size: 0.875rem;
+        color: var(--neutral-400);
+        margin: 0;
+    }
+    
+    /* Dashboard Sections */
+    .dashboard-section {
+        margin-bottom: 3rem;
+    }
+    
+    .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+    }
+    
+    .section-title {
+        font-size: 1.5rem;
+        margin: 0;
+        color: var(--primary-light);
+    }
+    
+    .btn-sm {
+        padding: 0.5rem 1rem;
+        font-size: 0.875rem;
+    }
+    
+    /* Pipeline */
+    .pipeline {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+    }
+    
+    .pipeline-stage {
+        background-color: rgba(10, 10, 20, 0.5);
+        border-radius: 12px;
+        padding: 1.5rem;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    
+    .stage-header {
+        margin-bottom: 1.5rem;
+    }
+    
+    .stage-name {
+        font-size: 1.25rem;
+        margin: 0 0 0.5rem 0;
+        color: var(--primary-light);
+    }
+    
+    .stage-stats {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.875rem;
+        color: var(--neutral-400);
+    }
+    
+    .stage-deals {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .deal-card {
+        background-color: rgba(255, 255, 255, 0.05);
+        border-radius: 8px;
+        padding: 1rem;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .deal-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+    
+    .deal-name {
+        font-size: 1rem;
+        margin: 0 0 0.5rem 0;
+    }
+    
+    .deal-name a {
+        color: var(--primary-light);
+        text-decoration: none;
+    }
+    
+    .deal-name a:hover {
+        color: var(--accent-purple-light);
+    }
+    
+    .deal-customer {
+        font-size: 0.875rem;
+        margin: 0 0 0.5rem 0;
+    }
+    
+    .deal-customer a {
+        color: var(--neutral-400);
+        text-decoration: none;
+    }
+    
+    .deal-customer a:hover {
+        color: var(--accent-purple-light);
+    }
+    
+    .deal-value {
+        font-size: 0.875rem;
+        font-weight: 600;
+        margin: 0;
+        color: var(--accent-purple-light);
+    }
+    
+    .more-deals {
+        text-align: center;
+        padding: 0.5rem;
+        font-size: 0.875rem;
+    }
+    
+    .more-deals a {
+        color: var(--neutral-400);
+        text-decoration: none;
+    }
+    
+    .more-deals a:hover {
+        color: var(--accent-purple-light);
+    }
+    
+    /* Activities */
+    .activities {
+        background-color: rgba(10, 10, 20, 0.5);
+        border-radius: 12px;
+        padding: 1.5rem;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    
+    .activity-card {
+        display: flex;
+        padding: 1rem 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    
+    .activity-card:last-child {
+        border-bottom: none;
+    }
+    
+    .activity-date {
+        min-width: 100px;
+        color: var(--neutral-400);
+        font-size: 0.875rem;
+    }
+    
+    .activity-content {
+        flex: 1;
+    }
+    
+    .activity-description {
+        margin-bottom: 0.5rem;
+        color: var(--primary-light);
+    }
+    
+    .activity-badge {
+        display: inline-block;
+        padding: 0.25rem 0.5rem;
+        font-size: 0.75rem;
+        font-weight: 600;
+        border-radius: 20px;
+        margin-right: 0.5rem;
+    }
+    
+    .badge-success {
+        background-color: rgba(0, 184, 148, 0.1);
+        color: #00b894;
+    }
+    
+    .badge-warning {
+        background-color: rgba(253, 203, 110, 0.1);
+        color: #fdcb6e;
+    }
+    
+    .badge-info {
+        background-color: rgba(9, 132, 227, 0.1);
+        color: #0984e3;
+    }
+    
+    .badge-primary {
+        background-color: rgba(123, 92, 255, 0.1);
+        color: var(--accent-purple);
+    }
+    
+    .activity-details {
+        font-size: 0.875rem;
+        color: var(--neutral-400);
+    }
+    
+    .activity-details a {
+        color: var(--accent-purple-light);
+        text-decoration: none;
+    }
+    
+    .activity-details a:hover {
+        text-decoration: underline;
+    }
+</style>
+{% endblock %}

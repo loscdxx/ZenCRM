@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}API Reference - CRM System{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>API Reference</h1>
+</div>
+
+<div class="content-section">
+    <h2>Introduction</h2>
+    <p>The CRM System API allows you to programmatically access and manipulate your CRM data.</p>
+    
+    <h3>Authentication</h3>
+    <p>All API requests require authentication using an API key. You can generate an API key in your account settings.</p>
+    <pre><code>curl -H "Authorization: Bearer YOUR_API_KEY" https://api.crmsystem.com/v1/customers</code></pre>
+    
+    <h2>Endpoints</h2>
+    
+    <h3>Customers</h3>
+    <ul>
+        <li><code>GET /api/v1/customers</code> - List all customers</li>
+        <li><code>GET /api/v1/customers/{id}</code> - Get a specific customer</li>
+        <li><code>POST /api/v1/customers</code> - Create a new customer</li>
+        <li><code>PUT /api/v1/customers/{id}</code> - Update a customer</li>
+        <li><code>DELETE /api/v1/customers/{id}</code> - Delete a customer</li>
+    </ul>
+    
+    <h3>Deals</h3>
+    <ul>
+        <li><code>GET /api/v1/deals</code> - List all deals</li>
+        <li><code>GET /api/v1/deals/{id}</code> - Get a specific deal</li>
+        <li><code>POST /api/v1/deals</code> - Create a new deal</li>
+        <li><code>PUT /api/v1/deals/{id}</code> - Update a deal</li>
+        <li><code>DELETE /api/v1/deals/{id}</code> - Delete a deal</li>
+    </ul>
+    
+    <h3>Users</h3>
+    <ul>
+        <li><code>GET /api/v1/users</code> - List all users</li>
+        <li><code>GET /api/v1/users/{id}</code> - Get a specific user</li>
+        <li><code>POST /api/v1/users</code> - Create a new user</li>
+        <li><code>PUT /api/v1/users/{id}</code> - Update a user</li>
+        <li><code>DELETE /api/v1/users/{id}</code> - Delete a user</li>
+    </ul>
+    
+    <h2>Rate Limiting</h2>
+    <p>The API is rate limited to 100 requests per minute per API key. If you exceed this limit, you will receive a 429 Too Many Requests response.</p>
+    
+    <h2>Error Handling</h2>
+    <p>The API returns standard HTTP status codes to indicate success or failure of a request. Error responses include a JSON body with an error message.</p>
+    <pre><code>{
+  "error": "Invalid customer ID",
+  "status": 404
+}</code></pre>
+</div>
+{% endblock %}

@@ -1,0 +1,243 @@
+{% extends 'base.html' %}
+
+{% block title %}Task Management - ZenCRM{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <div class="container">
+        <h1>Task Management</h1>
+        <p class="lead">Organize and track your tasks to stay productive.</p>
+    </div>
+</section>
+
+<section class="content-section">
+    <div class="container">
+        <div class="row mb-4">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h3 class="mb-0">Add New Task</h3>
+                    </div>
+                    <div class="card-body">
+                        <form id="task-form">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group mb-3">
+                                        <label for="task-title">Task Title</label>
+                                        <input type="text" class="form-control" id="task-title" placeholder="Enter task title" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group mb-3">
+                                        <label for="task-due-date">Due Date</label>
+                                        <input type="date" class="form-control" id="task-due-date" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group mb-3">
+                                        <label for="task-priority">Priority</label>
+                                        <select class="form-control" id="task-priority">
+                                            <option value="low">Low</option>
+                                            <option value="medium" selected>Medium</option>
+                                            <option value="high">High</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group mb-3">
+                                        <label for="task-related">Related To</label>
+                                        <select class="form-control" id="task-related">
+                                            <option value="">None</option>
+                                            <option value="customer">Customer</option>
+                                            <option value="deal">Deal</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group mb-3">
+                                <label for="task-description">Description</label>
+                                <textarea class="form-control" id="task-description" rows="3" placeholder="Enter task description"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Add Task</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h3 class="mb-0">My Tasks</h3>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-outline-primary active" data-filter="all">All</button>
+                            <button type="button" class="btn btn-outline-primary" data-filter="today">Today</button>
+                            <button type="button" class="btn btn-outline-primary" data-filter="upcoming">Upcoming</button>
+                            <button type="button" class="btn btn-outline-primary" data-filter="completed">Completed</button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 5%"></th>
+                                        <th style="width: 35%">Task</th>
+                                        <th style="width: 15%">Due Date</th>
+                                        <th style="width: 15%">Priority</th>
+                                        <th style="width: 15%">Related To</th>
+                                        <th style="width: 15%">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="task-list">
+                                    <tr>
+                                        <td>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value="" id="task1">
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <label class="form-check-label" for="task1">
+                                                Follow up with John Smith about proposal
+                                            </label>
+                                            <p class="text-muted small mb-0">Send updated pricing information</p>
+                                        </td>
+                                        <td><span class="badge bg-danger">Today</span></td>
+                                        <td><span class="badge bg-danger">High</span></td>
+                                        <td><a href="#">Acme Corp Deal</a></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary"><i class="fas fa-edit"></i></button>
+                                            <button class="btn btn-sm btn-outline-danger"><i class="fas fa-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value="" id="task2">
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <label class="form-check-label" for="task2">
+                                                Prepare presentation for TechStart Inc
+                                            </label>
+                                            <p class="text-muted small mb-0">Include case studies and ROI analysis</p>
+                                        </td>
+                                        <td><span class="badge bg-warning">Tomorrow</span></td>
+                                        <td><span class="badge bg-warning">Medium</span></td>
+                                        <td><a href="#">TechStart Deal</a></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary"><i class="fas fa-edit"></i></button>
+                                            <button class="btn btn-sm btn-outline-danger"><i class="fas fa-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value="" id="task3">
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <label class="form-check-label" for="task3">
+                                                Schedule demo with Global Solutions
+                                            </label>
+                                            <p class="text-muted small mb-0">Coordinate with product team</p>
+                                        </td>
+                                        <td><span class="badge bg-info">Next Week</span></td>
+                                        <td><span class="badge bg-info">Low</span></td>
+                                        <td><a href="#">Global Solutions</a></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary"><i class="fas fa-edit"></i></button>
+                                            <button class="btn btn-sm btn-outline-danger"><i class="fas fa-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr class="table-light">
+                                        <td>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value="" id="task4" checked>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <label class="form-check-label text-decoration-line-through" for="task4">
+                                                Send contract to Michael Chen
+                                            </label>
+                                            <p class="text-muted small mb-0">Include all terms discussed</p>
+                                        </td>
+                                        <td><span class="badge bg-secondary">Yesterday</span></td>
+                                        <td><span class="badge bg-danger">High</span></td>
+                                        <td><a href="#">Chen Consulting</a></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary"><i class="fas fa-edit"></i></button>
+                                            <button class="btn btn-sm btn-outline-danger"><i class="fas fa-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Set default due date to today
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('task-due-date').value = today;
+        
+        // Task form submission
+        document.getElementById('task-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // In a real application, you would send this data to the server
+            // For now, we'll just show an alert
+            alert('Task added successfully!');
+            
+            // Clear the form
+            this.reset();
+            document.getElementById('task-due-date').value = today;
+        });
+        
+        // Task filter buttons
+        const filterButtons = document.querySelectorAll('[data-filter]');
+        filterButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                // Remove active class from all buttons
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                
+                // Add active class to clicked button
+                this.classList.add('active');
+                
+                // In a real application, you would filter the tasks based on the selected filter
+                // For now, we'll just show an alert
+                alert(`Filtering tasks by: ${this.dataset.filter}`);
+            });
+        });
+        
+        // Task checkboxes
+        const checkboxes = document.querySelectorAll('.form-check-input');
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                const row = this.closest('tr');
+                const label = row.querySelector('.form-check-label');
+                
+                if (this.checked) {
+                    row.classList.add('table-light');
+                    label.classList.add('text-decoration-line-through');
+                } else {
+                    row.classList.remove('table-light');
+                    label.classList.remove('text-decoration-line-through');
+                }
+                
+                // In a real application, you would update the task status on the server
+            });
+        });
+    });
+</script>
+{% endblock %}

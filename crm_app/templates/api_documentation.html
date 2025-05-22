@@ -1,0 +1,859 @@
+{% extends "base.html" %}
+
+{% block title %}API Documentation - ZenCRM{% endblock %}
+
+{% block styles %}
+<style>
+    .api-section {
+        margin-bottom: 3rem;
+    }
+    
+    .endpoint {
+        margin-bottom: 2rem;
+        border-left: 4px solid var(--accent-purple);
+        padding-left: 1.5rem;
+    }
+    
+    .endpoint-title {
+        display: flex;
+        align-items: center;
+        margin-bottom: 1rem;
+    }
+    
+    .http-method {
+        font-size: 0.9rem;
+        font-weight: 600;
+        padding: 0.25rem 0.75rem;
+        border-radius: 4px;
+        margin-right: 1rem;
+    }
+    
+    .method-get {
+        background-color: #61affe;
+        color: #fff;
+    }
+    
+    .method-post {
+        background-color: #49cc90;
+        color: #fff;
+    }
+    
+    .method-put {
+        background-color: #fca130;
+        color: #fff;
+    }
+    
+    .method-delete {
+        background-color: #f93e3e;
+        color: #fff;
+    }
+    
+    .endpoint-path {
+        font-family: monospace;
+        font-size: 1.1rem;
+        background-color: rgba(255, 255, 255, 0.1);
+        padding: 0.25rem 0.5rem;
+        border-radius: 4px;
+    }
+    
+    .endpoint-description {
+        margin-bottom: 1rem;
+        color: var(--neutral-300);
+    }
+    
+    .code-block {
+        background-color: var(--primary-darker);
+        border-radius: 8px;
+        padding: 1rem;
+        margin: 1rem 0;
+        overflow-x: auto;
+        font-family: monospace;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .param-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 1rem 0;
+    }
+    
+    .param-table th, .param-table td {
+        padding: 0.75rem;
+        text-align: left;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .param-table th {
+        color: var(--neutral-300);
+        font-weight: 600;
+    }
+    
+    .param-required {
+        color: #f93e3e;
+        font-weight: 600;
+    }
+    
+    .param-optional {
+        color: var(--neutral-400);
+        font-style: italic;
+    }
+    
+    .response-example {
+        margin-top: 1rem;
+    }
+    
+    .tab-container {
+        margin: 2rem 0;
+    }
+    
+    .tab-buttons {
+        display: flex;
+        margin-bottom: 1rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .tab-button {
+        padding: 0.75rem 1.5rem;
+        background: none;
+        border: none;
+        color: var(--neutral-400);
+        cursor: pointer;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+    
+    .tab-button.active {
+        color: var(--accent-purple);
+        border-bottom: 2px solid var(--accent-purple);
+    }
+    
+    .tab-content {
+        display: none;
+    }
+    
+    .tab-content.active {
+        display: block;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="api-documentation">
+        <h1>ZenCRM API Documentation</h1>
+        <p class="lead">
+            This documentation provides information about the ZenCRM API endpoints, 
+            request parameters, and response formats.
+        </p>
+        
+        <div class="tab-container">
+            <div class="tab-buttons">
+                <button class="tab-button active" data-tab="overview">Overview</button>
+                <button class="tab-button" data-tab="authentication">Authentication</button>
+                <button class="tab-button" data-tab="customers">Customers API</button>
+                <button class="tab-button" data-tab="deals">Deals API</button>
+            </div>
+            
+            <div class="tab-content active" id="overview">
+                <div class="api-section">
+                    <h2>API Overview</h2>
+                    <p>
+                        The ZenCRM API allows you to programmatically access and manipulate customer and deal data.
+                        All API endpoints return data in JSON format and accept JSON-formatted request bodies.
+                    </p>
+                    
+                    <h3>Base URL</h3>
+                    <div class="code-block">
+                        <code>https://your-zencrm-instance.com/api</code>
+                    </div>
+                    
+                    <h3>Response Format</h3>
+                    <p>
+                        All responses are returned in JSON format. Successful responses typically include the requested data
+                        and a status code of 200 OK. Created resources return 201 Created.
+                    </p>
+                    
+                    <h3>Error Handling</h3>
+                    <p>
+                        When an error occurs, the API returns an appropriate HTTP status code and a JSON object with error details:
+                    </p>
+                    <div class="code-block">
+                        <pre>{
+  "error": "Error type or code",
+  "message": "Detailed error message"
+}</pre>
+                    </div>
+                    
+                    <h3>Common Status Codes</h3>
+                    <ul>
+                        <li><strong>200 OK</strong> - The request was successful</li>
+                        <li><strong>201 Created</strong> - A new resource was successfully created</li>
+                        <li><strong>400 Bad Request</strong> - The request was invalid or missing required parameters</li>
+                        <li><strong>401 Unauthorized</strong> - Authentication is required or failed</li>
+                        <li><strong>403 Forbidden</strong> - The authenticated user doesn't have permission</li>
+                        <li><strong>404 Not Found</strong> - The requested resource was not found</li>
+                        <li><strong>500 Internal Server Error</strong> - An unexpected error occurred on the server</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="tab-content" id="authentication">
+                <div class="api-section">
+                    <h2>Authentication</h2>
+                    <p>
+                        The ZenCRM API uses session-based authentication. You must be logged in to access the API endpoints.
+                        All API requests require authentication.
+                    </p>
+                    
+                    <h3>Login</h3>
+                    <p>
+                        To authenticate, use the standard login form at <code>/login</code>. Once authenticated, your session
+                        will be maintained and you can make API requests.
+                    </p>
+                    
+                    <h3>Session Cookies</h3>
+                    <p>
+                        After successful login, your browser will receive a session cookie that is automatically included
+                        in subsequent requests. This cookie handles authentication for API requests.
+                    </p>
+                    
+                    <h3>Logout</h3>
+                    <p>
+                        To end your session, visit <code>/logout</code>. This will invalidate your session.
+                    </p>
+                </div>
+            </div>
+            
+            <div class="tab-content" id="customers">
+                <div class="api-section">
+                    <h2>Customers API</h2>
+                    <p>
+                        The Customers API allows you to manage customer data in ZenCRM.
+                    </p>
+                    
+                    <div class="endpoint">
+                        <div class="endpoint-title">
+                            <span class="http-method method-get">GET</span>
+                            <span class="endpoint-path">/api/customers</span>
+                        </div>
+                        <div class="endpoint-description">
+                            Get a list of all customers.
+                        </div>
+                        
+                        <h4>Response</h4>
+                        <div class="code-block response-example">
+                            <pre>{
+  "customers": [
+    {
+      "id": 1,
+      "name": "Acme Corporation",
+      "email": "contact@acme.com",
+      "phone": "555-123-4567",
+      "company": "Acme Corporation",
+      "status": "Active",
+      "address": "123 Main St, Anytown, USA",
+      "notes": "Key enterprise customer",
+      "created_at": "2023-01-15T10:30:00",
+      "updated_at": "2023-02-20T14:15:00"
+    },
+    {
+      "id": 2,
+      "name": "TechStart Inc",
+      "email": "info@techstart.com",
+      "phone": "555-987-6543",
+      "company": "TechStart Inc",
+      "status": "Pending",
+      "address": "456 Innovation Way, Tech City, USA",
+      "notes": "Startup with growth potential",
+      "created_at": "2023-03-10T09:45:00",
+      "updated_at": "2023-03-10T09:45:00"
+    }
+  ]
+}</pre>
+                        </div>
+                    </div>
+                    
+                    <div class="endpoint">
+                        <div class="endpoint-title">
+                            <span class="http-method method-get">GET</span>
+                            <span class="endpoint-path">/api/customers/{id}</span>
+                        </div>
+                        <div class="endpoint-description">
+                            Get details for a specific customer, including related deals.
+                        </div>
+                        
+                        <h4>Parameters</h4>
+                        <table class="param-table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Type</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>id</td>
+                                    <td>Integer</td>
+                                    <td><span class="param-required">Required</span> - The customer ID</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <h4>Response</h4>
+                        <div class="code-block response-example">
+                            <pre>{
+  "customer": {
+    "id": 1,
+    "name": "Acme Corporation",
+    "email": "contact@acme.com",
+    "phone": "555-123-4567",
+    "company": "Acme Corporation",
+    "status": "Active",
+    "address": "123 Main St, Anytown, USA",
+    "notes": "Key enterprise customer",
+    "created_at": "2023-01-15T10:30:00",
+    "updated_at": "2023-02-20T14:15:00",
+    "deals": [
+      {
+        "id": 1,
+        "name": "Annual Software License",
+        "value": 25000.00,
+        "stage": "Closed Won",
+        "probability": 100,
+        "close_date": "2023-02-15",
+        "description": "Annual renewal of enterprise licenses"
+      },
+      {
+        "id": 3,
+        "name": "Consulting Services",
+        "value": 15000.00,
+        "stage": "Negotiation",
+        "probability": 75,
+        "close_date": "2023-04-30",
+        "description": "Implementation consulting services"
+      }
+    ]
+  }
+}</pre>
+                        </div>
+                    </div>
+                    
+                    <div class="endpoint">
+                        <div class="endpoint-title">
+                            <span class="http-method method-post">POST</span>
+                            <span class="endpoint-path">/api/customers</span>
+                        </div>
+                        <div class="endpoint-description">
+                            Create a new customer.
+                        </div>
+                        
+                        <h4>Request Body</h4>
+                        <table class="param-table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Type</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>name</td>
+                                    <td>String</td>
+                                    <td><span class="param-required">Required</span> - Customer name</td>
+                                </tr>
+                                <tr>
+                                    <td>email</td>
+                                    <td>String</td>
+                                    <td><span class="param-required">Required</span> - Customer email</td>
+                                </tr>
+                                <tr>
+                                    <td>company</td>
+                                    <td>String</td>
+                                    <td><span class="param-required">Required</span> - Company name</td>
+                                </tr>
+                                <tr>
+                                    <td>phone</td>
+                                    <td>String</td>
+                                    <td><span class="param-optional">Optional</span> - Phone number</td>
+                                </tr>
+                                <tr>
+                                    <td>address</td>
+                                    <td>String</td>
+                                    <td><span class="param-optional">Optional</span> - Physical address</td>
+                                </tr>
+                                <tr>
+                                    <td>status</td>
+                                    <td>String</td>
+                                    <td><span class="param-optional">Optional</span> - Customer status (defaults to "Pending")</td>
+                                </tr>
+                                <tr>
+                                    <td>notes</td>
+                                    <td>String</td>
+                                    <td><span class="param-optional">Optional</span> - Additional notes</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <h4>Example Request</h4>
+                        <div class="code-block">
+                            <pre>{
+  "name": "New Customer Inc",
+  "email": "contact@newcustomer.com",
+  "company": "New Customer Inc",
+  "phone": "555-555-5555",
+  "address": "789 Business Ave, Enterprise, USA",
+  "status": "Active",
+  "notes": "Referred by existing customer"
+}</pre>
+                        </div>
+                        
+                        <h4>Response</h4>
+                        <div class="code-block response-example">
+                            <pre>{
+  "customer": {
+    "id": 3,
+    "name": "New Customer Inc",
+    "email": "contact@newcustomer.com",
+    "phone": "555-555-5555",
+    "company": "New Customer Inc",
+    "status": "Active",
+    "address": "789 Business Ave, Enterprise, USA",
+    "notes": "Referred by existing customer",
+    "created_at": "2023-04-01T11:20:00"
+  },
+  "message": "Customer created successfully"
+}</pre>
+                        </div>
+                    </div>
+                    
+                    <div class="endpoint">
+                        <div class="endpoint-title">
+                            <span class="http-method method-put">PUT</span>
+                            <span class="endpoint-path">/api/customers/{id}</span>
+                        </div>
+                        <div class="endpoint-description">
+                            Update an existing customer.
+                        </div>
+                        
+                        <h4>Parameters</h4>
+                        <table class="param-table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Type</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>id</td>
+                                    <td>Integer</td>
+                                    <td><span class="param-required">Required</span> - The customer ID</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <h4>Request Body</h4>
+                        <p>Include only the fields you want to update.</p>
+                        <div class="code-block">
+                            <pre>{
+  "name": "Updated Customer Name",
+  "status": "Active",
+  "notes": "Updated customer notes"
+}</pre>
+                        </div>
+                        
+                        <h4>Response</h4>
+                        <div class="code-block response-example">
+                            <pre>{
+  "customer": {
+    "id": 2,
+    "name": "Updated Customer Name",
+    "email": "info@techstart.com",
+    "phone": "555-987-6543",
+    "company": "TechStart Inc",
+    "status": "Active",
+    "address": "456 Innovation Way, Tech City, USA",
+    "notes": "Updated customer notes",
+    "updated_at": "2023-04-05T16:30:00"
+  },
+  "message": "Customer updated successfully"
+}</pre>
+                        </div>
+                    </div>
+                    
+                    <div class="endpoint">
+                        <div class="endpoint-title">
+                            <span class="http-method method-delete">DELETE</span>
+                            <span class="endpoint-path">/api/customers/{id}</span>
+                        </div>
+                        <div class="endpoint-description">
+                            Delete a customer. Cannot delete customers with active deals.
+                        </div>
+                        
+                        <h4>Parameters</h4>
+                        <table class="param-table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Type</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>id</td>
+                                    <td>Integer</td>
+                                    <td><span class="param-required">Required</span> - The customer ID</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <h4>Success Response</h4>
+                        <div class="code-block response-example">
+                            <pre>{
+  "message": "Customer deleted successfully"
+}</pre>
+                        </div>
+                        
+                        <h4>Error Response</h4>
+                        <div class="code-block response-example">
+                            <pre>{
+  "error": "Cannot delete customer with active deals",
+  "message": "Please delete or reassign deals first"
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tab-content" id="deals">
+                <div class="api-section">
+                    <h2>Deals API</h2>
+                    <p>
+                        The Deals API allows you to manage deal data in ZenCRM.
+                    </p>
+                    
+                    <div class="endpoint">
+                        <div class="endpoint-title">
+                            <span class="http-method method-get">GET</span>
+                            <span class="endpoint-path">/api/deals</span>
+                        </div>
+                        <div class="endpoint-description">
+                            Get a list of all deals.
+                        </div>
+                        
+                        <h4>Response</h4>
+                        <div class="code-block response-example">
+                            <pre>{
+  "deals": [
+    {
+      "id": 1,
+      "name": "Annual Software License",
+      "value": 25000.00,
+      "stage": "Closed Won",
+      "probability": 100,
+      "close_date": "2023-02-15",
+      "description": "Annual renewal of enterprise licenses",
+      "customer_id": 1,
+      "customer_name": "Acme Corporation",
+      "created_at": "2023-01-20T09:00:00",
+      "updated_at": "2023-02-15T14:30:00"
+    },
+    {
+      "id": 2,
+      "name": "Hardware Upgrade",
+      "value": 12000.00,
+      "stage": "Proposal",
+      "probability": 50,
+      "close_date": "2023-05-15",
+      "description": "Server hardware upgrade",
+      "customer_id": 2,
+      "customer_name": "TechStart Inc",
+      "created_at": "2023-03-15T11:20:00",
+      "updated_at": "2023-03-15T11:20:00"
+    }
+  ]
+}</pre>
+                        </div>
+                    </div>
+                    
+                    <div class="endpoint">
+                        <div class="endpoint-title">
+                            <span class="http-method method-get">GET</span>
+                            <span class="endpoint-path">/api/deals/{id}</span>
+                        </div>
+                        <div class="endpoint-description">
+                            Get details for a specific deal, including related activities and customer information.
+                        </div>
+                        
+                        <h4>Parameters</h4>
+                        <table class="param-table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Type</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>id</td>
+                                    <td>Integer</td>
+                                    <td><span class="param-required">Required</span> - The deal ID</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <h4>Response</h4>
+                        <div class="code-block response-example">
+                            <pre>{
+  "deal": {
+    "id": 1,
+    "name": "Annual Software License",
+    "value": 25000.00,
+    "stage": "Closed Won",
+    "probability": 100,
+    "close_date": "2023-02-15",
+    "description": "Annual renewal of enterprise licenses",
+    "customer": {
+      "id": 1,
+      "name": "Acme Corporation",
+      "email": "contact@acme.com",
+      "company": "Acme Corporation"
+    },
+    "activities": [
+      {
+        "id": 1,
+        "type": "Created",
+        "description": "Deal created",
+        "created_at": "2023-01-20T09:00:00"
+      },
+      {
+        "id": 2,
+        "type": "Stage Change",
+        "description": "Deal stage changed from Negotiation to Closing",
+        "created_at": "2023-02-01T10:15:00"
+      },
+      {
+        "id": 3,
+        "type": "Stage Change",
+        "description": "Deal stage changed from Closing to Closed Won",
+        "created_at": "2023-02-15T14:30:00"
+      }
+    ],
+    "created_at": "2023-01-20T09:00:00",
+    "updated_at": "2023-02-15T14:30:00"
+  }
+}</pre>
+                        </div>
+                    </div>
+                    
+                    <div class="endpoint">
+                        <div class="endpoint-title">
+                            <span class="http-method method-post">POST</span>
+                            <span class="endpoint-path">/api/deals</span>
+                        </div>
+                        <div class="endpoint-description">
+                            Create a new deal.
+                        </div>
+                        
+                        <h4>Request Body</h4>
+                        <table class="param-table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Type</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>name</td>
+                                    <td>String</td>
+                                    <td><span class="param-required">Required</span> - Deal name</td>
+                                </tr>
+                                <tr>
+                                    <td>value</td>
+                                    <td>Number</td>
+                                    <td><span class="param-required">Required</span> - Deal value</td>
+                                </tr>
+                                <tr>
+                                    <td>stage</td>
+                                    <td>String</td>
+                                    <td><span class="param-required">Required</span> - Deal stage (Qualification, Proposal, Negotiation, Closing, Closed Won, Closed Lost)</td>
+                                </tr>
+                                <tr>
+                                    <td>customer_id</td>
+                                    <td>Integer</td>
+                                    <td><span class="param-required">Required</span> - ID of the associated customer</td>
+                                </tr>
+                                <tr>
+                                    <td>probability</td>
+                                    <td>Integer</td>
+                                    <td><span class="param-optional">Optional</span> - Probability of closing (0-100)</td>
+                                </tr>
+                                <tr>
+                                    <td>close_date</td>
+                                    <td>String</td>
+                                    <td><span class="param-optional">Optional</span> - Expected close date (ISO format: YYYY-MM-DD)</td>
+                                </tr>
+                                <tr>
+                                    <td>description</td>
+                                    <td>String</td>
+                                    <td><span class="param-optional">Optional</span> - Deal description</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <h4>Example Request</h4>
+                        <div class="code-block">
+                            <pre>{
+  "name": "New Software Implementation",
+  "value": 18500,
+  "stage": "Proposal",
+  "customer_id": 2,
+  "probability": 40,
+  "close_date": "2023-06-30",
+  "description": "Implementation of new software modules"
+}</pre>
+                        </div>
+                        
+                        <h4>Response</h4>
+                        <div class="code-block response-example">
+                            <pre>{
+  "deal": {
+    "id": 4,
+    "name": "New Software Implementation",
+    "value": 18500.00,
+    "stage": "Proposal",
+    "probability": 40,
+    "close_date": "2023-06-30",
+    "description": "Implementation of new software modules",
+    "customer_id": 2,
+    "created_at": "2023-04-10T15:45:00"
+  },
+  "message": "Deal created successfully"
+}</pre>
+                        </div>
+                    </div>
+                    
+                    <div class="endpoint">
+                        <div class="endpoint-title">
+                            <span class="http-method method-put">PUT</span>
+                            <span class="endpoint-path">/api/deals/{id}</span>
+                        </div>
+                        <div class="endpoint-description">
+                            Update an existing deal.
+                        </div>
+                        
+                        <h4>Parameters</h4>
+                        <table class="param-table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Type</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>id</td>
+                                    <td>Integer</td>
+                                    <td><span class="param-required">Required</span> - The deal ID</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <h4>Request Body</h4>
+                        <p>Include only the fields you want to update.</p>
+                        <div class="code-block">
+                            <pre>{
+  "stage": "Negotiation",
+  "probability": 60,
+  "value": 20000
+}</pre>
+                        </div>
+                        
+                        <h4>Response</h4>
+                        <div class="code-block response-example">
+                            <pre>{
+  "deal": {
+    "id": 4,
+    "name": "New Software Implementation",
+    "value": 20000.00,
+    "stage": "Negotiation",
+    "probability": 60,
+    "close_date": "2023-06-30",
+    "description": "Implementation of new software modules",
+    "customer_id": 2,
+    "updated_at": "2023-04-15T09:30:00"
+  },
+  "message": "Deal updated successfully"
+}</pre>
+                        </div>
+                    </div>
+                    
+                    <div class="endpoint">
+                        <div class="endpoint-title">
+                            <span class="http-method method-delete">DELETE</span>
+                            <span class="endpoint-path">/api/deals/{id}</span>
+                        </div>
+                        <div class="endpoint-description">
+                            Delete a deal and its associated activities.
+                        </div>
+                        
+                        <h4>Parameters</h4>
+                        <table class="param-table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Type</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>id</td>
+                                    <td>Integer</td>
+                                    <td><span class="param-required">Required</span> - The deal ID</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <h4>Response</h4>
+                        <div class="code-block response-example">
+                            <pre>{
+  "message": "Deal deleted successfully"
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Tab functionality
+        const tabButtons = document.querySelectorAll('.tab-button');
+        const tabContents = document.querySelectorAll('.tab-content');
+        
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Remove active class from all buttons and contents
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                tabContents.forEach(content => content.classList.remove('active'));
+                
+                // Add active class to clicked button and corresponding content
+                button.classList.add('active');
+                const tabId = button.getAttribute('data-tab');
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+    });
+</script>
+{% endblock %}

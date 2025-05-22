@@ -1,0 +1,299 @@
+{% extends "base.html" %}
+
+{% block title %}Task Management - CRM System{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>Task Management</h1>
+</div>
+
+<div class="content-section">
+    <div class="task-controls">
+        <div class="task-search">
+            <input type="text" placeholder="Search tasks..." class="task-search-input">
+            <button class="btn btn-primary task-search-btn">
+                <i class="fas fa-search"></i>
+            </button>
+        </div>
+        
+        <div class="task-filters">
+            <select class="task-filter-select">
+                <option value="all">All Tasks</option>
+                <option value="today">Due Today</option>
+                <option value="week">Due This Week</option>
+                <option value="overdue">Overdue</option>
+                <option value="completed">Completed</option>
+            </select>
+            
+            <button class="btn btn-primary">
+                <i class="fas fa-plus"></i> New Task
+            </button>
+        </div>
+    </div>
+    
+    <div class="task-board">
+        <div class="task-column">
+            <div class="task-column-header">
+                <h3>To Do</h3>
+                <span class="task-count">3</span>
+            </div>
+            
+            <div class="task-list">
+                <div class="task-card">
+                    <div class="task-priority high"></div>
+                    <h4 class="task-title">Follow up with John Smith</h4>
+                    <p class="task-description">Send proposal for enterprise license</p>
+                    <div class="task-meta">
+                        <span class="task-due"><i class="far fa-calendar"></i> Today</span>
+                        <span class="task-related"><i class="fas fa-link"></i> Deal #1</span>
+                    </div>
+                </div>
+                
+                <div class="task-card">
+                    <div class="task-priority medium"></div>
+                    <h4 class="task-title">Prepare presentation</h4>
+                    <p class="task-description">Create slides for next week's demo</p>
+                    <div class="task-meta">
+                        <span class="task-due"><i class="far fa-calendar"></i> Tomorrow</span>
+                        <span class="task-related"><i class="fas fa-link"></i> Deal #3</span>
+                    </div>
+                </div>
+                
+                <div class="task-card">
+                    <div class="task-priority low"></div>
+                    <h4 class="task-title">Update customer records</h4>
+                    <p class="task-description">Add new contact information</p>
+                    <div class="task-meta">
+                        <span class="task-due"><i class="far fa-calendar"></i> Next week</span>
+                        <span class="task-related"><i class="fas fa-link"></i> Customer #2</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="task-column">
+            <div class="task-column-header">
+                <h3>In Progress</h3>
+                <span class="task-count">2</span>
+            </div>
+            
+            <div class="task-list">
+                <div class="task-card">
+                    <div class="task-priority high"></div>
+                    <h4 class="task-title">Finalize contract</h4>
+                    <p class="task-description">Review legal terms and send for signature</p>
+                    <div class="task-meta">
+                        <span class="task-due"><i class="far fa-calendar"></i> Today</span>
+                        <span class="task-related"><i class="fas fa-link"></i> Deal #2</span>
+                    </div>
+                </div>
+                
+                <div class="task-card">
+                    <div class="task-priority medium"></div>
+                    <h4 class="task-title">Schedule demo</h4>
+                    <p class="task-description">Coordinate with team for product demo</p>
+                    <div class="task-meta">
+                        <span class="task-due"><i class="far fa-calendar"></i> Friday</span>
+                        <span class="task-related"><i class="fas fa-link"></i> Deal #3</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="task-column">
+            <div class="task-column-header">
+                <h3>Completed</h3>
+                <span class="task-count">2</span>
+            </div>
+            
+            <div class="task-list">
+                <div class="task-card completed">
+                    <div class="task-priority medium"></div>
+                    <h4 class="task-title">Initial discovery call</h4>
+                    <p class="task-description">Introductory call with potential client</p>
+                    <div class="task-meta">
+                        <span class="task-due"><i class="far fa-calendar-check"></i> Completed</span>
+                        <span class="task-related"><i class="fas fa-link"></i> Deal #1</span>
+                    </div>
+                </div>
+                
+                <div class="task-card completed">
+                    <div class="task-priority low"></div>
+                    <h4 class="task-title">Send follow-up email</h4>
+                    <p class="task-description">Thank you note after meeting</p>
+                    <div class="task-meta">
+                        <span class="task-due"><i class="far fa-calendar-check"></i> Completed</span>
+                        <span class="task-related"><i class="fas fa-link"></i> Customer #3</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block styles %}
+<style>
+    .task-controls {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+    
+    .task-search {
+        display: flex;
+        flex: 1;
+        max-width: 400px;
+    }
+    
+    .task-search-input {
+        flex: 1;
+        padding: 0.75rem 1rem;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        background: rgba(10, 10, 20, 0.5);
+        border-radius: 8px 0 0 8px;
+        color: var(--primary-light);
+        font-size: 1rem;
+    }
+    
+    .task-search-btn {
+        border-radius: 0 8px 8px 0;
+        padding: 0.75rem 1rem;
+    }
+    
+    .task-filters {
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+    }
+    
+    .task-filter-select {
+        padding: 0.75rem 1rem;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        background: rgba(10, 10, 20, 0.5);
+        border-radius: 8px;
+        color: var(--primary-light);
+        font-size: 1rem;
+    }
+    
+    .task-board {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 2rem;
+        margin-top: 2rem;
+    }
+    
+    .task-column {
+        background: rgba(10, 10, 20, 0.3);
+        border-radius: 12px;
+        padding: 1.5rem;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    
+    .task-column-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    
+    .task-count {
+        background: rgba(123, 92, 255, 0.2);
+        color: var(--accent-purple-light);
+        padding: 0.25rem 0.75rem;
+        border-radius: 12px;
+        font-size: 0.85rem;
+        font-weight: 600;
+    }
+    
+    .task-list {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .task-card {
+        background: rgba(10, 10, 20, 0.5);
+        border-radius: 8px;
+        padding: 1.25rem;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        position: relative;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .task-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+    }
+    
+    .task-priority {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 4px;
+        height: 100%;
+        border-radius: 8px 0 0 8px;
+    }
+    
+    .task-priority.high {
+        background: linear-gradient(to bottom, #ff5e62, #ff9966);
+    }
+    
+    .task-priority.medium {
+        background: linear-gradient(to bottom, #ffb347, #ffcc33);
+    }
+    
+    .task-priority.low {
+        background: linear-gradient(to bottom, #56ccf2, #2f80ed);
+    }
+    
+    .task-title {
+        margin: 0 0 0.5rem 0;
+        padding-left: 0.5rem;
+        font-size: 1.1rem;
+    }
+    
+    .task-description {
+        color: var(--neutral-400);
+        margin: 0 0 1rem 0;
+        padding-left: 0.5rem;
+        font-size: 0.95rem;
+    }
+    
+    .task-meta {
+        display: flex;
+        justify-content: space-between;
+        color: var(--neutral-500);
+        font-size: 0.85rem;
+        padding-left: 0.5rem;
+    }
+    
+    .task-card.completed {
+        opacity: 0.7;
+    }
+    
+    .task-card.completed .task-title {
+        text-decoration: line-through;
+        color: var(--neutral-400);
+    }
+    
+    .page-header {
+        margin: 2rem 0;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    
+    .page-header h1 {
+        font-size: 2.5rem;
+        background: linear-gradient(135deg, var(--accent-purple-light), var(--accent-blue));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,164 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ customer.name }} - CRM System{% endblock %}
+
+{% block content %}
+<div class="customer-view">
+    <div class="page-header">
+        <div>
+            <h1 class="page-title">{{ customer.name }}</h1>
+            <p class="company">{{ customer.company }}</p>
+        </div>
+        <div class="actions">
+            <a href="#" class="btn btn-secondary">
+                <i class="fas fa-edit"></i> Edit
+            </a>
+            <a href="{{ url_for('customers_list') }}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Back to Customers
+            </a>
+        </div>
+    </div>
+    
+    <div class="customer-details">
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">Contact Information</h2>
+            </div>
+            <div class="card-body">
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-label">Email</div>
+                        <div class="info-value">
+                            <a href="mailto:{{ customer.email }}">{{ customer.email }}</a>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Phone</div>
+                        <div class="info-value">
+                            <a href="tel:{{ customer.phone }}">{{ customer.phone }}</a>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Address</div>
+                        <div class="info-value">{{ customer.address }}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Status</div>
+                        <div class="info-value">
+                            <span class="badge badge-{% if customer.status == 'Active' %}success{% elif customer.status == 'Pending' %}warning{% else %}info{% endif %}">
+                                {{ customer.status }}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Customer Since</div>
+                        <div class="info-value">{{ customer.created_at }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">Notes</h2>
+            </div>
+            <div class="card-body">
+                <p>{{ customer.notes }}</p>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">Deals</h2>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Value</th>
+                                <th>Stage</th>
+                                <th>Probability</th>
+                                <th>Expected Close</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <a href="{{ url_for('deal_view', id=1) }}">Enterprise License</a>
+                                </td>
+                                <td>$75,000</td>
+                                <td>
+                                    <span class="badge badge-info">Qualification</span>
+                                </td>
+                                <td>30%</td>
+                                <td>2023-12-15</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block styles %}
+<style>
+    .customer-view {
+        padding: 2rem 0;
+    }
+    
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 2rem;
+    }
+    
+    .page-title {
+        margin: 0 0 0.5rem 0;
+        font-size: 2rem;
+        background: linear-gradient(135deg, var(--accent-purple-light), var(--accent-blue));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+    
+    .company {
+        margin: 0;
+        font-size: 1.25rem;
+        color: var(--primary-light);
+        opacity: 0.7;
+    }
+    
+    .actions {
+        display: flex;
+        gap: 1rem;
+    }
+    
+    .customer-details {
+        display: grid;
+        gap: 2rem;
+    }
+    
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1.5rem;
+    }
+    
+    .info-label {
+        font-size: 0.875rem;
+        color: var(--primary-light);
+        opacity: 0.7;
+        margin-bottom: 0.5rem;
+    }
+    
+    .info-value {
+        font-size: 1rem;
+        color: var(--primary-light);
+    }
+</style>
+{% endblock %}

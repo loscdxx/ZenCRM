@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+
+{% block title %}Blog - ZenCRM{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <div class="container">
+        <h1>ZenCRM Blog</h1>
+        <p class="lead">Insights, tips, and best practices for sales and customer relationship management.</p>
+    </div>
+</section>
+
+<section class="content-section">
+    <div class="container">
+        <div class="blog-grid">
+            <div class="blog-card">
+                <div class="blog-image">
+                    <img src="{{ url_for('static', filename='images/blog-1.jpg') }}" alt="Sales Pipeline Management">
+                </div>
+                <div class="blog-content">
+                    <div class="blog-meta">
+                        <span class="blog-date">June 15, 2023</span>
+                        <span class="blog-category">Sales</span>
+                    </div>
+                    <h3>7 Strategies to Optimize Your Sales Pipeline</h3>
+                    <p>Learn how to streamline your sales process and close more deals with these proven strategies.</p>
+                    <a href="#" class="btn-link">Read More</a>
+                </div>
+            </div>
+            
+            <div class="blog-card">
+                <div class="blog-image">
+                    <img src="{{ url_for('static', filename='images/blog-2.jpg') }}" alt="Customer Retention">
+                </div>
+                <div class="blog-content">
+                    <div class="blog-meta">
+                        <span class="blog-date">May 28, 2023</span>
+                        <span class="blog-category">Customer Success</span>
+                    </div>
+                    <h3>The Ultimate Guide to Customer Retention</h3>
+                    <p>Discover proven techniques to keep your customers happy and reduce churn rate.</p>
+                    <a href="#" class="btn-link">Read More</a>
+                </div>
+            </div>
+            
+            <div class="blog-card">
+                <div class="blog-image">
+                    <img src="{{ url_for('static', filename='images/blog-3.jpg') }}" alt="CRM Implementation">
+                </div>
+                <div class="blog-content">
+                    <div class="blog-meta">
+                        <span class="blog-date">May 10, 2023</span>
+                        <span class="blog-category">Implementation</span>
+                    </div>
+                    <h3>5 Common CRM Implementation Mistakes (And How to Avoid Them)</h3>
+                    <p>Learn from others' mistakes and ensure a smooth CRM implementation for your team.</p>
+                    <a href="#" class="btn-link">Read More</a>
+                </div>
+            </div>
+            
+            <div class="blog-card">
+                <div class="blog-image">
+                    <img src="{{ url_for('static', filename='images/blog-4.jpg') }}" alt="Sales Forecasting">
+                </div>
+                <div class="blog-content">
+                    <div class="blog-meta">
+                        <span class="blog-date">April 22, 2023</span>
+                        <span class="blog-category">Analytics</span>
+                    </div>
+                    <h3>How to Create Accurate Sales Forecasts Using CRM Data</h3>
+                    <p>Leverage your CRM data to predict future sales and make better business decisions.</p>
+                    <a href="#" class="btn-link">Read More</a>
+                </div>
+            </div>
+            
+            <div class="blog-card">
+                <div class="blog-image">
+                    <img src="{{ url_for('static', filename='images/blog-5.jpg') }}" alt="Email Marketing">
+                </div>
+                <div class="blog-content">
+                    <div class="blog-meta">
+                        <span class="blog-date">April 8, 2023</span>
+                        <span class="blog-category">Marketing</span>
+                    </div>
+                    <h3>10 Email Templates That Drive Customer Engagement</h3>
+                    <p>Copy-and-paste these proven email templates to improve your customer communication.</p>
+                    <a href="#" class="btn-link">Read More</a>
+                </div>
+            </div>
+            
+            <div class="blog-card">
+                <div class="blog-image">
+                    <img src="{{ url_for('static', filename='images/blog-6.jpg') }}" alt="Remote Sales">
+                </div>
+                <div class="blog-content">
+                    <div class="blog-meta">
+                        <span class="blog-date">March 25, 2023</span>
+                        <span class="blog-category">Remote Work</span>
+                    </div>
+                    <h3>Managing a Remote Sales Team: Best Practices</h3>
+                    <p>Learn how to effectively lead and motivate your sales team in a remote environment.</p>
+                    <a href="#" class="btn-link">Read More</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="pagination">
+            <a href="#" class="pagination-item active">1</a>
+            <a href="#" class="pagination-item">2</a>
+            <a href="#" class="pagination-item">3</a>
+            <a href="#" class="pagination-item next">Next</a>
+        </div>
+    </div>
+</section>
+
+<section class="newsletter-section">
+    <div class="container">
+        <div class="newsletter-box">
+            <h2>Subscribe to Our Newsletter</h2>
+            <p>Get the latest CRM tips, trends, and best practices delivered straight to your inbox.</p>
+            <form class="newsletter-form">
+                <input type="email" placeholder="Your email address" required>
+                <button type="submit" class="btn-primary">Subscribe</button>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}

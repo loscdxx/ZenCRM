@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+
+{% block title %}Welcome to CRM System{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero animate-fadeIn">
+    <h1 class="hero-title">Modern CRM System</h1>
+    <h2 class="hero-subtitle">Streamline your customer relationships with our powerful CRM solution</h2>
+    <div>
+        <a href="{{ url_for('auth.register') }}" class="btn btn-primary">
+            <i class="fas fa-user-plus"></i> Get Started
+        </a>
+        <a href="{{ url_for('auth.login') }}" class="btn btn-secondary">
+            <i class="fas fa-sign-in-alt"></i> Login
+        </a>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="features">
+    <h2 class="text-center mb-5">Key Features</h2>
+    
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="feature-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <h3 class="card-title">Customer Management</h3>
+                <p class="card-text">Easily manage your customer database with detailed profiles, interaction history, and custom fields.</p>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card">
+                <div class="feature-icon">
+                    <i class="fas fa-handshake"></i>
+                </div>
+                <h3 class="card-title">Deal Tracking</h3>
+                <p class="card-text">Track deals from lead to close with customizable pipelines, stages, and probability forecasting.</p>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card">
+                <div class="feature-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <h3 class="card-title">Analytics & Reporting</h3>
+                <p class="card-text">Gain insights with powerful analytics and customizable reports to optimize your sales process.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Testimonials Section -->
+<section class="testimonials bg-secondary py-5">
+    <div class="container">
+        <h2 class="text-center mb-5">What Our Customers Say</h2>
+        
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card">
+                    <p class="card-text">"This CRM system has transformed how we manage our customer relationships. The interface is intuitive and the features are powerful."</p>
+                    <div class="d-flex align-items-center mt-3">
+                        <div class="ms-3">
+                            <h4 class="mb-0">John Smith</h4>
+                            <p class="mb-0 text-muted">Sales Director, TechCorp</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card">
+                    <p class="card-text">"The deal tracking feature has helped us increase our close rate by 35%. I can't imagine running our sales team without it now."</p>
+                    <div class="d-flex align-items-center mt-3">
+                        <div class="ms-3">
+                            <h4 class="mb-0">Sarah Johnson</h4>
+                            <p class="mb-0 text-muted">VP of Sales, GrowthCo</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card">
+                    <p class="card-text">"The analytics dashboard gives us real-time insights into our sales pipeline. It's been a game-changer for our quarterly planning."</p>
+                    <div class="d-flex align-items-center mt-3">
+                        <div class="ms-3">
+                            <h4 class="mb-0">Michael Chen</h4>
+                            <p class="mb-0 text-muted">CEO, StartupX</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta py-5 text-center">
+    <h2>Ready to Transform Your Customer Relationships?</h2>
+    <p class="mb-4">Join thousands of businesses that trust our CRM system to manage their customer relationships.</p>
+    <a href="{{ url_for('auth.register') }}" class="btn btn-primary btn-lg">
+        <i class="fas fa-rocket"></i> Get Started Today
+    </a>
+</section>
+{% endblock %}

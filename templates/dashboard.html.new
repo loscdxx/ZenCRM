@@ -1,0 +1,208 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard | ZenCRM{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <h1 class="fw-bold mb-0">Dashboard</h1>
+        <p class="text-muted">Welcome to your CRM dashboard</p>
+    </div>
+</div>
+
+<div class="row g-4 mb-4">
+    <!-- Customer Count -->
+    <div class="col-md-6 col-lg-3">
+        <div class="card stat-card h-100">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h6 class="card-title">CUSTOMERS</h6>
+                    <h2 class="card-text">{{ customer_count }}</h2>
+                </div>
+                <div class="icon text-primary">
+                    <i class="fas fa-users"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Open Deals Count -->
+    <div class="col-md-6 col-lg-3">
+        <div class="card stat-card h-100">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h6 class="card-title">OPEN DEALS</h6>
+                    <h2 class="card-text">{{ open_deals_count }}</h2>
+                </div>
+                <div class="icon text-warning">
+                    <i class="fas fa-handshake"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Won Deals Count -->
+    <div class="col-md-6 col-lg-3">
+        <div class="card stat-card h-100">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h6 class="card-title">WON DEALS</h6>
+                    <h2 class="card-text">{{ won_deals_count }}</h2>
+                </div>
+                <div class="icon text-success">
+                    <i class="fas fa-trophy"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Total Open Value -->
+    <div class="col-md-6 col-lg-3">
+        <div class="card stat-card h-100">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h6 class="card-title">OPEN VALUE</h6>
+                    <h2 class="card-text">${{ "{:,.2f}".format(total_open_value) }}</h2>
+                </div>
+                <div class="icon text-primary">
+                    <i class="fas fa-dollar-sign"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <!-- Recent Customers -->
+    <div class="col-lg-6">
+        <div class="card h-100">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Recent Customers</h5>
+                <a href="{{ url_for('customers') }}" class="btn btn-sm btn-outline-primary">View All</a>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Company</th>
+                                <th>Added</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for customer in recent_customers %}
+                            <tr>
+                                <td>{{ customer.name }}</td>
+                                <td>{{ customer.company or 'N/A' }}</td>
+                                <td>{{ customer.created_at.strftime('%b %d, %Y') }}</td>
+                                <td class="text-end">
+                                    <a href="{{ url_for('view_customer', customer_id=customer.id) }}" class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                            {% if not recent_customers %}
+                            <tr>
+                                <td colspan="4" class="text-center py-4">No customers found</td>
+                            </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Recent Deals -->
+    <div class="col-lg-6">
+        <div class="card h-100">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Recent Deals</h5>
+                <a href="{{ url_for('deals') }}" class="btn btn-sm btn-outline-primary">View All</a>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Value</th>
+                                <th>Status</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for deal in recent_deals %}
+                            <tr>
+                                <td>{{ deal.title }}</td>
+                                <td>${{ "{:,.2f}".format(deal.value) }}</td>
+                                <td>
+                                    {% if deal.status == 'Open' %}
+                                    <span class="badge badge-open">Open</span>
+                                    {% elif deal.status == 'Won' %}
+                                    <span class="badge badge-won">Won</span>
+                                    {% elif deal.status == 'Lost' %}
+                                    <span class="badge badge-lost">Lost</span>
+                                    {% endif %}
+                                </td>
+                                <td class="text-end">
+                                    <a href="{{ url_for('view_deal', deal_id=deal.id) }}" class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                            {% if not recent_deals %}
+                            <tr>
+                                <td colspan="4" class="text-center py-4">No deals found</td>
+                            </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Forecast Summary -->
+    <div class="col-12 mt-4">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Forecast Summary</h5>
+                <a href="{{ url_for('forecast') }}" class="btn btn-sm btn-outline-primary">View Detailed Forecast</a>
+            </div>
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col-md-6">
+                        <div class="d-flex flex-column">
+                            <div class="mb-4">
+                                <h6 class="text-muted mb-1">Total Open Value</h6>
+                                <h3 class="fw-bold">${{ "{:,.2f}".format(total_open_value) }}</h3>
+                            </div>
+                            <div>
+                                <h6 class="text-muted mb-1">Weighted Forecast</h6>
+                                <h3 class="fw-bold">${{ "{:,.2f}".format(total_forecast_value) }}</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="alert alert-primary">
+                            <h6 class="alert-heading fw-bold"><i class="fas fa-lightbulb me-2"></i>Pro Tip</h6>
+                            <p class="mb-0">Increase your forecast accuracy by regularly updating deal probabilities and expected close dates.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Add any dashboard-specific JavaScript here
+</script>
+{% endblock %}

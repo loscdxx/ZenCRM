@@ -1,0 +1,155 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ title }} | ZenCRM{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="fw-bold mb-0">{{ title }}</h1>
+        <p class="text-muted">{% if deal %}Update deal information{% else %}Add a new deal to your pipeline{% endif %}</p>
+    </div>
+    <a href="{{ url_for('deal.list_deals') }}" class="btn btn-outline-primary">
+        <i class="fas fa-arrow-left me-2"></i>Back to Deals
+    </a>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <form method="POST" class="row g-3">
+            {{ form.hidden_tag() }}
+            
+            <div class="col-md-6">
+                {{ form.title.label(class="form-label") }}
+                {{ form.title(class="form-control" + (" is-invalid" if form.title.errors else "")) }}
+                {% if form.title.errors %}
+                    <div class="invalid-feedback">
+                        {% for error in form.title.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            
+            <div class="col-md-6">
+                {{ form.customer_id.label(class="form-label") }}
+                {{ form.customer_id(class="form-select" + (" is-invalid" if form.customer_id.errors else "")) }}
+                {% if form.customer_id.errors %}
+                    <div class="invalid-feedback">
+                        {% for error in form.customer_id.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            
+            <div class="col-md-4">
+                {{ form.value.label(class="form-label") }}
+                <div class="input-group">
+                    <span class="input-group-text">$</span>
+                    {{ form.value(class="form-control" + (" is-invalid" if form.value.errors else "")) }}
+                    {% if form.value.errors %}
+                        <div class="invalid-feedback">
+                            {% for error in form.value.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                {{ form.probability.label(class="form-label") }}
+                <div class="input-group">
+                    {{ form.probability(class="form-control" + (" is-invalid" if form.probability.errors else "")) }}
+                    <span class="input-group-text">%</span>
+                    {% if form.probability.errors %}
+                        <div class="invalid-feedback">
+                            {% for error in form.probability.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                {{ form.status.label(class="form-label") }}
+                {{ form.status(class="form-select" + (" is-invalid" if form.status.errors else "")) }}
+                {% if form.status.errors %}
+                    <div class="invalid-feedback">
+                        {% for error in form.status.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            
+            <div class="col-md-6">
+                {{ form.expected_close_date.label(class="form-label") }}
+                {{ form.expected_close_date(class="form-control" + (" is-invalid" if form.expected_close_date.errors else ""), type="date") }}
+                {% if form.expected_close_date.errors %}
+                    <div class="invalid-feedback">
+                        {% for error in form.expected_close_date.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            
+            <div class="col-md-6">
+                <label class="form-label">Forecast Value</label>
+                <div class="input-group">
+                    <span class="input-group-text">$</span>
+                    <input type="text" class="form-control" id="forecast_value" readonly>
+                </div>
+                <div class="form-text">Calculated as Value × Probability</div>
+            </div>
+            
+            <div class="col-12">
+                {{ form.notes.label(class="form-label") }}
+                {{ form.notes(class="form-control" + (" is-invalid" if form.notes.errors else ""), rows=4) }}
+                {% if form.notes.errors %}
+                    <div class="invalid-feedback">
+                        {% for error in form.notes.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            
+            <div class="col-12 mt-4">
+                <div class="d-flex justify-content-end">
+                    <a href="{{ url_for('deal.list_deals') }}" class="btn btn-outline-secondary me-2">Cancel</a>
+                    {{ form.submit(class="btn btn-primary") }}
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Calculate forecast value
+    function calculateForecast() {
+        const value = parseFloat(document.getElementById('value').value) || 0;
+        const probability = parseFloat(document.getElementById('probability').value) || 0;
+        const forecast = value * (probability / 100);
+        document.getElementById('forecast_value').value = forecast.toLocaleString('en-US', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
+    }
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        const valueInput = document.getElementById('value');
+        const probabilityInput = document.getElementById('probability');
+        
+        valueInput.addEventListener('input', calculateForecast);
+        probabilityInput.addEventListener('input', calculateForecast);
+        
+        // Initial calculation
+        calculateForecast();
+    });
+</script>
+{% endblock %}

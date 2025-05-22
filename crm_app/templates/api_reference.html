@@ -1,0 +1,151 @@
+{% extends 'base.html' %}
+
+{% block title %}API Reference - ZenCRM{% endblock %}
+
+{% block content %}
+<div class="container page-container">
+    <div class="page-header">
+        <h1>API Reference</h1>
+        <p class="lead">Integrate with ZenCRM using our powerful API</p>
+    </div>
+
+    <div class="content-section">
+        <h2>Getting Started</h2>
+        <p>The ZenCRM API allows you to access and manipulate your CRM data programmatically. This reference provides information about the available endpoints, request formats, and response structures.</p>
+        
+        <div class="api-auth-section">
+            <h3>Authentication</h3>
+            <p>All API requests require authentication using an API key. You can generate an API key from your account settings.</p>
+            
+            <div class="code-block">
+                <pre><code>curl -X GET "https://api.zencrm.com/v1/customers" \
+-H "Authorization: Bearer YOUR_API_KEY"</code></pre>
+            </div>
+        </div>
+    </div>
+
+    <div class="content-section">
+        <h2>Endpoints</h2>
+        
+        <div class="endpoint-section">
+            <h3>Customers</h3>
+            
+            <div class="endpoint-item">
+                <h4>List Customers</h4>
+                <p><code>GET /v1/customers</code></p>
+                <p>Returns a list of customers in your account.</p>
+                
+                <h5>Parameters</h5>
+                <ul>
+                    <li><code>limit</code> (optional): Maximum number of customers to return (default: 20)</li>
+                    <li><code>offset</code> (optional): Number of customers to skip (default: 0)</li>
+                    <li><code>sort</code> (optional): Field to sort by (e.g., 'name', 'created_at')</li>
+                </ul>
+                
+                <h5>Response</h5>
+                <div class="code-block">
+                    <pre><code>{
+  "data": [
+    {
+      "id": "cus_123456",
+      "name": "Acme Inc.",
+      "email": "contact@acme.com",
+      "phone": "+1 (234) 567-890",
+      "created_at": "2023-01-15T10:30:00Z"
+    },
+    {
+      "id": "cus_123457",
+      "name": "Globex Corporation",
+      "email": "info@globex.com",
+      "phone": "+1 (234) 567-891",
+      "created_at": "2023-01-16T14:20:00Z"
+    }
+  ],
+  "meta": {
+    "total": 42,
+    "limit": 20,
+    "offset": 0
+  }
+}</code></pre>
+                </div>
+            </div>
+            
+            <div class="endpoint-item">
+                <h4>Get Customer</h4>
+                <p><code>GET /v1/customers/:id</code></p>
+                <p>Returns details for a specific customer.</p>
+                
+                <h5>Response</h5>
+                <div class="code-block">
+                    <pre><code>{
+  "id": "cus_123456",
+  "name": "Acme Inc.",
+  "email": "contact@acme.com",
+  "phone": "+1 (234) 567-890",
+  "address": {
+    "street": "123 Main St",
+    "city": "San Francisco",
+    "state": "CA",
+    "zip": "94105",
+    "country": "US"
+  },
+  "created_at": "2023-01-15T10:30:00Z",
+  "updated_at": "2023-02-10T15:45:00Z"
+}</code></pre>
+                </div>
+            </div>
+        </div>
+        
+        <div class="endpoint-section">
+            <h3>Deals</h3>
+            
+            <div class="endpoint-item">
+                <h4>List Deals</h4>
+                <p><code>GET /v1/deals</code></p>
+                <p>Returns a list of deals in your account.</p>
+                
+                <h5>Parameters</h5>
+                <ul>
+                    <li><code>customer_id</code> (optional): Filter deals by customer</li>
+                    <li><code>stage</code> (optional): Filter deals by stage</li>
+                    <li><code>limit</code> (optional): Maximum number of deals to return (default: 20)</li>
+                    <li><code>offset</code> (optional): Number of deals to skip (default: 0)</li>
+                </ul>
+            </div>
+            
+            <div class="endpoint-item">
+                <h4>Create Deal</h4>
+                <p><code>POST /v1/deals</code></p>
+                <p>Creates a new deal.</p>
+                
+                <h5>Request Body</h5>
+                <div class="code-block">
+                    <pre><code>{
+  "name": "Enterprise Software License",
+  "customer_id": "cus_123456",
+  "value": 25000,
+  "stage": "Qualification",
+  "expected_close_date": "2023-06-30"
+}</code></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="content-section">
+        <h2>Rate Limits</h2>
+        <p>The API is rate limited to 100 requests per minute per API key. If you exceed this limit, you'll receive a 429 Too Many Requests response.</p>
+        
+        <h2>Errors</h2>
+        <p>The API uses conventional HTTP response codes to indicate the success or failure of an API request:</p>
+        <ul>
+            <li><code>200 OK</code>: The request was successful</li>
+            <li><code>400 Bad Request</code>: The request was invalid</li>
+            <li><code>401 Unauthorized</code>: Authentication failed</li>
+            <li><code>404 Not Found</code>: The requested resource was not found</li>
+            <li><code>429 Too Many Requests</code>: Rate limit exceeded</li>
+            <li><code>500 Internal Server Error</code>: Something went wrong on our end</li>
+        </ul>
+    </div>
+</div>
+{% endblock %}

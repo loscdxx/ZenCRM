@@ -1,0 +1,185 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ deal.name }} - CRM System{% endblock %}
+
+{% block content %}
+<div class="deal-view">
+    <div class="page-header">
+        <div>
+            <h1 class="page-title">{{ deal.name }}</h1>
+            <p class="customer">
+                <a href="{{ url_for('customer_view', id=deal.customer_id) }}">{{ deal.customer_name }}</a>
+            </p>
+        </div>
+        <div class="actions">
+            <a href="#" class="btn btn-secondary">
+                <i class="fas fa-edit"></i> Edit
+            </a>
+            <a href="{{ url_for('deals_list') }}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Back to Deals
+            </a>
+        </div>
+    </div>
+    
+    <div class="deal-details">
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">Deal Information</h2>
+            </div>
+            <div class="card-body">
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-label">Value</div>
+                        <div class="info-value">${{ deal.value }}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Stage</div>
+                        <div class="info-value">
+                            <span class="badge badge-{% if deal.stage == 'Qualification' %}info{% elif deal.stage == 'Proposal' %}warning{% elif deal.stage == 'Closing' %}success{% else %}primary{% endif %}">
+                                {{ deal.stage }}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Probability</div>
+                        <div class="info-value">{{ deal.probability }}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Expected Close Date</div>
+                        <div class="info-value">{{ deal.close_date }}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Created Date</div>
+                        <div class="info-value">{{ deal.created_at }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">Description</h2>
+            </div>
+            <div class="card-body">
+                <p>{{ deal.description }}</p>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">Activities</h2>
+            </div>
+            <div class="card-body">
+                <div class="activities">
+                    {% for activity in deal.activities %}
+                    <div class="activity">
+                        <div class="activity-date">{{ activity.date }}</div>
+                        <div class="activity-content">
+                            <div class="activity-type">{{ activity.type }}</div>
+                            <div class="activity-description">{{ activity.description }}</div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block styles %}
+<style>
+    .deal-view {
+        padding: 2rem 0;
+    }
+    
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 2rem;
+    }
+    
+    .page-title {
+        margin: 0 0 0.5rem 0;
+        font-size: 2rem;
+        background: linear-gradient(135deg, var(--accent-purple-light), var(--accent-blue));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+    
+    .customer {
+        margin: 0;
+        font-size: 1.25rem;
+        color: var(--primary-light);
+        opacity: 0.7;
+    }
+    
+    .actions {
+        display: flex;
+        gap: 1rem;
+    }
+    
+    .deal-details {
+        display: grid;
+        gap: 2rem;
+    }
+    
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1.5rem;
+    }
+    
+    .info-label {
+        font-size: 0.875rem;
+        color: var(--primary-light);
+        opacity: 0.7;
+        margin-bottom: 0.5rem;
+    }
+    
+    .info-value {
+        font-size: 1rem;
+        color: var(--primary-light);
+    }
+    
+    .activities {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+    
+    .activity {
+        display: flex;
+        gap: 1rem;
+        padding-bottom: 1.5rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .activity:last-child {
+        padding-bottom: 0;
+        border-bottom: none;
+    }
+    
+    .activity-date {
+        min-width: 100px;
+        color: var(--primary-light);
+        opacity: 0.7;
+    }
+    
+    .activity-content {
+        flex: 1;
+    }
+    
+    .activity-type {
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        color: var(--accent-purple-light);
+    }
+    
+    .activity-description {
+        color: var(--primary-light);
+    }
+</style>
+{% endblock %}

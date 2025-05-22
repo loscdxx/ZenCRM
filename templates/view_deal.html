@@ -1,0 +1,366 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ deal.title }} | ZenCRM{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="fw-bold mb-0">{{ deal.title }}</h1>
+        <p class="text-muted">
+            <a href="{{ url_for('view_customer', customer_id=deal.customer_id) }}" class="text-decoration-none">
+                {{ deal.customer.name }}
+            </a>
+            {% if deal.customer.company %} | {{ deal.customer.company }}{% endif %}
+        </p>
+    </div>
+    <div>
+        <a href="{{ url_for('edit_deal', deal_id=deal.id) }}" class="btn btn-outline-primary me-2">
+            <i class="fas fa-edit me-2"></i>Edit
+        </a>
+        <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteDealModal">
+            <i class="fas fa-trash me-2"></i>Delete
+        </button>
+    </div>
+</div>
+
+<div class="row g-4">
+    <!-- Deal Details -->
+    <div class="col-lg-4">
+        <div class="card h-100">
+            <div class="card-header">
+                <h5 class="mb-0">Deal Details</h5>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <h6 class="text-muted mb-1">Value</h6>
+                    <p class="mb-0 fs-4 fw-bold">${{ "{:,.2f}".format(deal.value) }}</p>
+                </div>
+                <div class="mb-3">
+                    <h6 class="text-muted mb-1">Probability</h6>
+                    <div class="progress mb-2" style="height: 10px;">
+                        <div class="progress-bar" role="progressbar" style="width: {{ deal.probability }}%;" 
+                             aria-valuenow="{{ deal.probability }}" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <p class="mb-0">{{ deal.probability }}%</p>
+                </div>
+                <div class="mb-3">
+                    <h6 class="text-muted mb-1">Forecast Value</h6>
+                    <p class="mb-0">${{ "{:,.2f}".format(deal.forecast_value) }}</p>
+                </div>
+                <div class="mb-3">
+                    <h6 class="text-muted mb-1">Expected Close Date</h6>
+                    <p class="mb-0">{{ deal.expected_close_date.strftime('%B %d, %Y') }}</p>
+                </div>
+                <div class="mb-3">
+                    <h6 class="text-muted mb-1">Status</h6>
+                    <p class="mb-0">
+                        {% if deal.status == 'Open' %}
+                        <span class="badge badge-open">Open</span>
+                        {% elif deal.status == 'Won' %}
+                        <span class="badge badge-won">Won</span>
+                        {% elif deal.status == 'Lost' %}
+                        <span class="badge badge-lost">Lost</span>
+                        {% endif %}
+                    </p>
+                </div>
+                <div>
+                    <h6 class="text-muted mb-1">Created On</h6>
+                    <p class="mb-0">{{ deal.created_at.strftime('%B %d, %Y') }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Deal Notes -->
+    <div class="col-lg-8">
+        <div class="card h-100">
+            <div class="card-header">
+                <h5 class="mb-0">Notes</h5>
+            </div>
+            <div class="card-body">
+                {% if deal.notes %}
+                <p>{{ deal.notes }}</p>
+                {% else %}
+                <p class="text-muted">No notes available for this deal.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <!-- Quick Actions -->
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Quick Actions</h5>
+            </div>
+            <div class="card-body">
+                <div class="row g-3">
+                    {% if deal.status == 'Open' %}
+                    <div class="col-md-6 col-lg-3">
+                        <form action="{{ url_for('edit_deal', deal_id=deal.id) }}" method="POST" id="markWonForm">
+                            <input type="hidden" name="title" value="{{ deal.title }}">
+                            <input type="hidden" name="value" value="{{ deal.value }}">
+                            <input type="hidden" name="probability" value="100">
+                            <input type="hidden" name="expected_close_date" value="{{ deal.expected_close_date.strftime('%Y-%m-%d') }}">
+                            <input type="hidden" name="status" value="Won">
+                            <input type="hidden" name="notes" value="{{ deal.notes or '' }}">
+                            <input type="hidden" name="customer_id" value="{{ deal.customer_id }}">
+                            <button type="button" class="btn btn-success w-100" onclick="confirmAction('markWonForm', 'Mark as Won')">
+                                <i class="fas fa-check-circle me-2"></i>Mark as Won
+                            </button>
+                        </form>
+                    </div>
+                    <div class="col-md-6 col-lg-3">
+                        <form action="{{ url_for('edit_deal', deal_id=deal.id) }}" method="POST" id="markLostForm">
+                            <input type="hidden" name="title" value="{{ deal.title }}">
+                            <input type="hidden" name="value" value="{{ deal.value }}">
+                            <input type="hidden" name="probability" value="0">
+                            <input type="hidden" name="expected_close_date" value="{{ deal.expected_close_date.strftime('%Y-%m-%d') }}">
+                            <input type="hidden" name="status" value="Lost">
+                            <input type="hidden" name="notes" value="{{ deal.notes or '' }}">
+                            <input type="hidden" name="customer_id" value="{{ deal.customer_id }}">
+                            <button type="button" class="btn btn-danger w-100" onclick="confirmAction('markLostForm', 'Mark as Lost')">
+                                <i class="fas fa-times-circle me-2"></i>Mark as Lost
+                            </button>
+                        </form>
+                    </div>
+                    {% elif deal.status == 'Won' or deal.status == 'Lost' %}
+                    <div class="col-md-6 col-lg-3">
+                        <form action="{{ url_for('edit_deal', deal_id=deal.id) }}" method="POST" id="reopenForm">
+                            <input type="hidden" name="title" value="{{ deal.title }}">
+                            <input type="hidden" name="value" value="{{ deal.value }}">
+                            <input type="hidden" name="probability" value="50">
+                            <input type="hidden" name="expected_close_date" value="{{ deal.expected_close_date.strftime('%Y-%m-%d') }}">
+                            <input type="hidden" name="status" value="Open">
+                            <input type="hidden" name="notes" value="{{ deal.notes or '' }}">
+                            <input type="hidden" name="customer_id" value="{{ deal.customer_id }}">
+                            <button type="button" class="btn btn-primary w-100" onclick="confirmAction('reopenForm', 'Reopen Deal')">
+                                <i class="fas fa-redo me-2"></i>Reopen Deal
+                            </button>
+                        </form>
+                    </div>
+                    {% endif %}
+                    <div class="col-md-6 col-lg-3">
+                        <a href="{{ url_for('add_deal') }}" class="btn btn-outline-primary w-100">
+                            <i class="fas fa-plus me-2"></i>New Deal
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Modal -->
+<div class="modal fade" id="deleteDealModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirm Delete</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete <strong>{{ deal.title }}</strong>?</p>
+                <p class="text-danger">This action cannot be undone.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <form action="{{ url_for('delete_deal', deal_id=deal.id) }}" method="POST">
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Confirm Action Modal -->
+<div class="modal fade" id="confirmActionModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmActionTitle">Confirm Action</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="confirmActionBody">
+                Are you sure you want to perform this action?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="confirmActionButton">Confirm</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function confirmAction(formId, actionName) {
+        const modal = new bootstrap.Modal(document.getElementById('confirmActionModal'));
+        document.getElementById('confirmActionTitle').textContent = actionName;
+        document.getElementById('confirmActionBody').textContent = `Are you sure you want to ${actionName.toLowerCase()} this deal?`;
+        
+        document.getElementById('confirmActionButton').onclick = function() {
+            document.getElementById(formId).submit();
+        };
+        
+        modal.show();
+    }
+</script>
+{% endblock %}{% extends 'base.html' %}
+
+{% block title %}{{ deal.title }} - CRM System{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>{{ deal.title }}</h1>
+    <div>
+        <a href="{{ url_for('deals') }}" class="btn btn-secondary me-2">
+            <i class="bi bi-arrow-left"></i> Back to Deals
+        </a>
+        <a href="{{ url_for('edit_deal', deal_id=deal.id) }}" class="btn btn-warning">
+            <i class="bi bi-pencil"></i> Edit
+        </a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Deal Information</h5>
+            </div>
+            <div class="card-body">
+                <div class="row mb-3">
+                    <div class="col-md-4 fw-bold">Customer:</div>
+                    <div class="col-md-8">
+                        <a href="{{ url_for('view_customer', customer_id=deal.customer.id) }}">
+                            {{ deal.customer.name }}
+                        </a>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-4 fw-bold">Value:</div>
+                    <div class="col-md-8">${{ "{:,.2f}".format(deal.value) }}</div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-4 fw-bold">Probability:</div>
+                    <div class="col-md-8">{{ deal.probability }}%</div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-4 fw-bold">Forecast Value:</div>
+                    <div class="col-md-8">${{ "{:,.2f}".format(deal.forecast_value) }}</div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-4 fw-bold">Expected Close:</div>
+                    <div class="col-md-8">{{ deal.expected_close_date.strftime('%Y-%m-%d') }}</div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-4 fw-bold">Status:</div>
+                    <div class="col-md-8">
+                        {% if deal.status == 'Open' %}
+                        <span class="badge bg-primary">{{ deal.status }}</span>
+                        {% elif deal.status == 'Won' %}
+                        <span class="badge bg-success">{{ deal.status }}</span>
+                        {% else %}
+                        <span class="badge bg-danger">{{ deal.status }}</span>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-4 fw-bold">Created:</div>
+                    <div class="col-md-8">{{ deal.created_at.strftime('%Y-%m-%d %H:%M') }}</div>
+                </div>
+                {% if deal.notes %}
+                <div class="row mb-3">
+                    <div class="col-md-4 fw-bold">Notes:</div>
+                    <div class="col-md-8">{{ deal.notes }}</div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Forecast Visualization</h5>
+            </div>
+            <div class="card-body">
+                <div class="progress mb-3" style="height: 25px;">
+                    <div class="progress-bar" role="progressbar" style="width: {{ deal.probability }}%;" aria-valuenow="{{ deal.probability }}" aria-valuemin="0" aria-valuemax="100">{{ deal.probability }}%</div>
+                </div>
+                
+                <div class="row text-center">
+                    <div class="col-6">
+                        <div class="card bg-light mb-3">
+                            <div class="card-body">
+                                <h6 class="card-title">Total Value</h6>
+                                <h4 class="card-text">${{ "{:,.2f}".format(deal.value) }}</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="card bg-light mb-3">
+                            <div class="card-body">
+                                <h6 class="card-title">Forecast Value</h6>
+                                <h4 class="card-text">${{ "{:,.2f}".format(deal.forecast_value) }}</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <canvas id="dealChart" height="200"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const ctx = document.getElementById('dealChart').getContext('2d');
+        const dealChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Deal Value'],
+                datasets: [{
+                    label: 'Total Value',
+                    data: [{{ deal.value }}],
+                    backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }, {
+                    label: 'Forecast Value',
+                    data: [{{ deal.forecast_value }}],
+                    backgroundColor: 'rgba(255, 159, 64, 0.5)',
+                    borderColor: 'rgba(255, 159, 64, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value) {
+                                return '$' + value.toLocaleString();
+                            }
+                        }
+                    }
+                },
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.dataset.label + ': $' + context.raw.toLocaleString();
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,414 @@
+{% extends 'base.html' %}
+
+{% block title %}Welcome to ZenCRM{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero">
+    <div class="hero-content">
+        <div class="hero-logo">
+            <img src="{{ url_for('static', filename='images/zen_cobra_mascot_large.svg') }}" alt="ZenCRM Purple Cobra" class="main-logo">
+        </div>
+        <h1>The AI-Powered ZenCRM</h1>
+        <h3 class="mascot-tagline">Powered by the Purple Cobra</h3>
+        <h2>The most integrated, customizable, and intuitive CRM—handles the routine so you can focus on building relationships.</h2>
+        <div class="hero-buttons">
+            <a href="{{ url_for('auth.register') }}" class="btn btn-primary">
+                Get Started
+            </a>
+            <a href="{{ url_for('auth.login') }}" class="btn btn-secondary">
+                Log In
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="container features-section">
+    <h2 class="section-title">Built For Business, Optimized For Growth</h2>
+    <p class="section-subtitle">Everything you need to manage customers, deals, and growth—without the complexity.</p>
+
+    <div class="features-grid">
+        <div class="feature-card">
+            <div class="feature-icon">
+                <i class="fas fa-users"></i>
+            </div>
+            <h3 class="feature-title">Customer Management</h3>
+            <p class="feature-description">Track all customer interactions and maintain detailed profiles in one place.</p>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon">
+                <i class="fas fa-handshake"></i>
+            </div>
+            <h3 class="feature-title">Deal Tracking</h3>
+            <p class="feature-description">Monitor deals from lead to close with customizable pipelines and stages.</p>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon">
+                <i class="fas fa-chart-line"></i>
+            </div>
+            <h3 class="feature-title">Analytics & Reporting</h3>
+            <p class="feature-description">Gain insights with powerful analytics and customizable reports to optimize your sales.</p>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon">
+                <i class="fas fa-tasks"></i>
+            </div>
+            <h3 class="feature-title">Task Management</h3>
+            <p class="feature-description">Never miss a follow-up with integrated task management and reminders.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Testimonials Section -->
+<section class="testimonials-section">
+    <div class="container">
+        <h2 class="section-title">Loved By Businesses</h2>
+        <p class="section-subtitle">See what our customers are saying about ZenCRM</p>
+
+        <div class="testimonials-grid">
+            <div class="testimonial-card">
+                <div class="testimonial-content">
+                    <p>"ZenCRM has transformed how we manage our customer relationships. The interface is intuitive and the features are powerful."</p>
+                </div>
+                <div class="testimonial-author">
+                    <div class="author-info">
+                        <h4>John Smith</h4>
+                        <p>Sales Director, TechCorp</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="testimonial-card">
+                <div class="testimonial-content">
+                    <p>"The deal tracking feature has helped us increase our close rate by 35%. I can't imagine running our sales team without it now."</p>
+                </div>
+                <div class="testimonial-author">
+                    <div class="author-info">
+                        <h4>Sarah Johnson</h4>
+                        <p>VP of Sales, GrowthCo</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="testimonial-card">
+                <div class="testimonial-content">
+                    <p>"The analytics dashboard gives us real-time insights into our sales pipeline. It's been a game-changer for our quarterly planning."</p>
+                </div>
+                <div class="testimonial-author">
+                    <div class="author-info">
+                        <h4>Michael Chen</h4>
+                        <p>CEO, StartupX</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Devs Time Savings Promo Section -->
+<section class="savings-promo-section">
+    <div class="container">
+        <h2 class="section-title">Maximize Developer Productivity</h2>
+        <p class="section-subtitle">Discover how ZenCRM can save your development team valuable time and money</p>
+
+        <div class="savings-promo-content">
+            <div class="savings-promo-text">
+                <h3>50% Time Savings for Your Development Team</h3>
+                <p>ZenCRM's advanced AI capabilities can help your developers work more efficiently by automating repetitive tasks, generating boilerplate code, and providing intelligent suggestions.</p>
+                <p>Our customers report saving an average of 50% of their development time, allowing them to focus on innovation and high-value tasks.</p>
+                <a href="{{ url_for('main.time_savings') }}" class="btn btn-primary">
+                    Calculate Your Savings <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+            <div class="savings-promo-image">
+                <img src="{{ url_for('static', filename='images/time_savings.svg') }}" alt="Developer Time Savings" onerror="this.src='https://via.placeholder.com/400x300?text=Time+Savings'">
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta-section">
+    <div class="container">
+        <div class="cta-content">
+            <h2>Ready to Transform Your Customer Relationships?</h2>
+            <p>Join thousands of businesses that trust ZenCRM to manage their customer relationships.</p>
+            <a href="{{ url_for('auth.register') }}" class="btn btn-primary btn-lg">
+                Get Started Today
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}
+
+{% block styles %}
+<style>
+    body {
+        padding-top: 4rem;
+    }
+
+    .hero-logo {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 2rem;
+    }
+
+    .main-logo {
+        width: 200px;
+        height: 200px;
+        filter: drop-shadow(0 0 10px rgba(123, 92, 255, 0.5));
+        animation: float 6s ease-in-out infinite;
+    }
+
+    @keyframes float {
+        0% {
+            transform: translateY(0px);
+        }
+        50% {
+            transform: translateY(-15px);
+        }
+        100% {
+            transform: translateY(0px);
+        }
+    }
+
+    .mascot-tagline {
+        font-size: 1.2rem;
+        margin-bottom: 1rem;
+        color: #9370db;
+        font-style: italic;
+        font-weight: 500;
+        text-shadow: 0 0 10px rgba(147, 112, 219, 0.5);
+    }
+
+    .section-title {
+        font-size: 2.5rem;
+        text-align: center;
+        margin-bottom: 1rem;
+        background: linear-gradient(135deg, var(--accent-purple-light), var(--accent-blue));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .section-subtitle {
+        text-align: center;
+        color: var(--neutral-400);
+        max-width: 700px;
+        margin: 0 auto 3rem;
+        font-size: 1.25rem;
+    }
+
+    .features-section {
+        padding: 6rem 0;
+    }
+
+    .features-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2rem;
+    }
+
+    .feature-card {
+        background-color: rgba(10, 10, 20, 0.5);
+        border-radius: 12px;
+        padding: 2rem;
+        text-align: center;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .feature-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .feature-icon {
+        font-size: 2.5rem;
+        margin-bottom: 1.5rem;
+        background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .feature-title {
+        font-size: 1.25rem;
+        margin-bottom: 1rem;
+        color: var(--primary-light);
+    }
+
+    .feature-description {
+        color: var(--neutral-400);
+        line-height: 1.6;
+    }
+
+    .testimonials-section {
+        padding: 6rem 0;
+        background-color: rgba(5, 5, 16, 0.5);
+    }
+
+    .testimonials-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+    }
+
+    .testimonial-card {
+        background-color: rgba(10, 10, 20, 0.5);
+        border-radius: 12px;
+        padding: 2rem;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .testimonial-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .testimonial-content {
+        margin-bottom: 1.5rem;
+        color: var(--neutral-300);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    .testimonial-author {
+        display: flex;
+        align-items: center;
+    }
+
+    .author-info h4 {
+        margin: 0;
+        color: var(--primary-light);
+        font-size: 1.1rem;
+    }
+
+    .author-info p {
+        margin: 0;
+        color: var(--neutral-500);
+        font-size: 0.9rem;
+    }
+
+    /* Devs Time Savings Promo Section Styles */
+    .savings-promo-section {
+        padding: 6rem 0;
+        background-color: rgba(5, 5, 16, 0.5);
+    }
+
+    .savings-promo-content {
+        display: flex;
+        align-items: center;
+        gap: 4rem;
+        max-width: 1000px;
+        margin: 0 auto;
+    }
+
+    .savings-promo-text {
+        flex: 1;
+    }
+
+    .savings-promo-text h3 {
+        font-size: 1.75rem;
+        margin-bottom: 1.5rem;
+        color: var(--primary-light);
+        line-height: 1.3;
+    }
+
+    .savings-promo-text p {
+        color: var(--neutral-300);
+        margin-bottom: 1.5rem;
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    .savings-promo-text .btn {
+        margin-top: 1rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .savings-promo-image {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .savings-promo-image img {
+        max-width: 100%;
+        border-radius: 12px;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    @media (max-width: 768px) {
+        .savings-promo-content {
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .savings-promo-text {
+            order: 1;
+        }
+
+        .savings-promo-image {
+            order: 0;
+        }
+    }
+
+    .cta-section {
+        padding: 6rem 0;
+        text-align: center;
+    }
+
+    .cta-content {
+        max-width: 700px;
+        margin: 0 auto;
+    }
+
+    .cta-content h2 {
+        font-size: 2.5rem;
+        margin-bottom: 1.5rem;
+        background: linear-gradient(135deg, var(--accent-purple-light), var(--accent-blue));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .cta-content p {
+        color: var(--neutral-400);
+        font-size: 1.25rem;
+        margin-bottom: 2rem;
+    }
+
+    .btn-lg {
+        padding: 1rem 2rem;
+        font-size: 1.1rem;
+    }
+
+    /* Responsive styles for savings calculator */
+    @media (max-width: 768px) {
+        .calculator-inputs {
+            grid-template-columns: 1fr;
+        }
+
+        .savings-results {
+            grid-template-columns: 1fr;
+        }
+
+        .savings-value {
+            font-size: 1.75rem;
+        }
+    }
+</style>
+{% endblock %}

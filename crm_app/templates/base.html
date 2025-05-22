@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}ZenCRM{% endblock %}</title>
+
+    <!-- Google Fonts - Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    {% block styles %}{% endblock %}
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="{{ url_for('main.index') }}" class="navbar-brand">
+                <img src="{{ url_for('static', filename='images/snake_logo_small.svg') }}" alt="ZenCRM Purple Cobra" class="brand-logo" width="30" height="30">
+                ZenCRM <span class="mascot-name">Purple Cobra</span>
+            </a>
+
+            <div class="nav-links">
+                {% if current_user.is_authenticated %}
+                <a href="{{ url_for('main.dashboard') }}" class="nav-link {% if request.path == url_for('main.dashboard') %}active{% endif %}">
+                    Dashboard
+                </a>
+                <a href="{{ url_for('customers.list') }}" class="nav-link {% if request.path.startswith(url_for('customers.list')) %}active{% endif %}">
+                    Customers
+                </a>
+                <a href="{{ url_for('deals.list') }}" class="nav-link {% if request.path.startswith(url_for('deals.list')) %}active{% endif %}">
+                    Deals
+                </a>
+                <a href="{{ url_for('main.time_savings') }}" class="nav-link {% if request.path == url_for('main.time_savings') %}active{% endif %}">
+                    Devs Time Savings
+                </a>
+                <a href="{{ url_for('main.contact') }}" class="nav-link {% if request.path == url_for('main.contact') %}active{% endif %}">
+                    Contact Us
+                </a>
+                <a href="{{ url_for('auth.logout') }}" class="nav-link">
+                    Logout
+                </a>
+                {% else %}
+                <a href="{{ url_for('main.time_savings') }}" class="nav-link {% if request.path == url_for('main.time_savings') %}active{% endif %}">
+                    Devs Time Savings
+                </a>
+                <a href="{{ url_for('auth.login') }}" class="nav-link {% if request.path == url_for('auth.login') %}active{% endif %}">
+                    Log In
+                </a>
+                <a href="{{ url_for('main.contact') }}" class="nav-link {% if request.path == url_for('main.contact') %}active{% endif %}">
+                    Contact Us
+                </a>
+                <a href="{{ url_for('auth.register') }}" class="nav-link btn-nav">
+                    Get Started
+                </a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Flash Messages -->
+        <div class="container flash-container">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </div>
+
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Floating Help Button -->
+    <div class="help-button" id="helpButton">
+        <img src="{{ url_for('static', filename='images/snake_logo_small.svg') }}" alt="ZenCRM Purple Cobra Assistant" class="help-icon">
+        <span class="help-tooltip">Ask the Purple Cobra for help!</span>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3 class="footer-title">ZenCRM</h3>
+                    <p>The most integrated, customizable, and intuitive CRM—handles the routine so you can focus on building relationships.</p>
+                </div>
+                <div class="footer-section">
+                    <h3 class="footer-title">Product</h3>
+                    <a href="{{ url_for('main.dashboard') }}" class="footer-link">Dashboard</a>
+                    <a href="{{ url_for('customers.list') }}" class="footer-link">Customer Management</a>
+                    <a href="{{ url_for('deals.list') }}" class="footer-link">Deal Tracking</a>
+                    <a href="{{ url_for('main.time_savings') }}" class="footer-link">Devs Time Savings</a>
+                    <a href="{{ url_for('main.analytics') }}" class="footer-link">Analytics</a>
+                    <a href="{{ url_for('main.tasks') }}" class="footer-link">Task Management</a>
+                </div>
+                <div class="footer-section">
+                    <h3 class="footer-title">Resources</h3>
+                    <a href="{{ url_for('main.documentation') }}" class="footer-link">Documentation</a>
+                    <a href="{{ url_for('main.api_reference') }}" class="footer-link">API Reference</a>
+                    <a href="{{ url_for('main.blog') }}" class="footer-link">Blog</a>
+                    <a href="{{ url_for('main.community') }}" class="footer-link">Community</a>
+                </div>
+                <div class="footer-section">
+                    <h3 class="footer-title">Company</h3>
+                    <a href="{{ url_for('main.about') }}" class="footer-link">About Us</a>
+                    <a href="{{ url_for('main.careers') }}" class="footer-link">Careers</a>
+                    <a href="{{ url_for('main.privacy') }}" class="footer-link">Privacy Policy</a>
+                    <a href="{{ url_for('main.terms') }}" class="footer-link">Terms & Conditions</a>
+                </div>
+            </div>
+            <p class="copyright">© 2023 ZenCRM. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    <!-- Help Button Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const helpButton = document.getElementById('helpButton');
+
+            helpButton.addEventListener('click', function() {
+                // Create chat modal if it doesn't exist
+                let chatModal = document.getElementById('chatModal');
+
+                if (!chatModal) {
+                    chatModal = document.createElement('div');
+                    chatModal.id = 'chatModal';
+                    chatModal.className = 'chat-modal';
+
+                    chatModal.innerHTML = `
+                        <div class="chat-header">
+                            <div class="chat-title">
+                                <img src="{{ url_for('static', filename='images/snake_logo_small.svg') }}" alt="ZenCRM Purple Cobra" class="chat-logo">
+                                <span>Purple Cobra Assistant</span>
+                            </div>
+                            <button class="chat-close" id="closeChatBtn">&times;</button>
+                        </div>
+                        <div class="chat-body">
+                            <div class="chat-message assistant">
+                                <div class="message-content">
+                                    <p>👋 Hi there! I'm the Purple Cobra, your ZenCRM assistant. How can I help you today?</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="chat-input">
+                            <input type="text" id="userInput" placeholder="Type your question here...">
+                            <button id="sendMessageBtn">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    `;
+
+                    document.body.appendChild(chatModal);
+
+                    // Add event listeners for the chat
+                    document.getElementById('closeChatBtn').addEventListener('click', function() {
+                        chatModal.classList.remove('active');
+                    });
+
+                    document.getElementById('sendMessageBtn').addEventListener('click', sendUserMessage);
+                    document.getElementById('userInput').addEventListener('keypress', function(e) {
+                        if (e.key === 'Enter') {
+                            sendUserMessage();
+                        }
+                    });
+
+                    // Add CSS for the chat modal
+                    const style = document.createElement('style');
+                    style.textContent = `
+                        .chat-modal {
+                            position: fixed;
+                            bottom: 100px;
+                            right: 30px;
+                            width: 350px;
+                            height: 450px;
+                            background-color: var(--primary-dark);
+                            border-radius: 12px;
+                            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.3);
+                            display: flex;
+                            flex-direction: column;
+                            z-index: 1001;
+                            border: 1px solid rgba(255, 255, 255, 0.1);
+                            opacity: 0;
+                            transform: translateY(20px) scale(0.95);
+                            pointer-events: none;
+                            transition: all 0.3s ease;
+                        }
+
+                        .chat-modal.active {
+                            opacity: 1;
+                            transform: translateY(0) scale(1);
+                            pointer-events: all;
+                        }
+
+                        .chat-header {
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: center;
+                            padding: 15px;
+                            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+                        }
+
+                        .chat-title {
+                            display: flex;
+                            align-items: center;
+                            gap: 10px;
+                            font-weight: 600;
+                            color: var(--primary-light);
+                        }
+
+                        .chat-logo {
+                            width: 24px;
+                            height: 24px;
+                        }
+
+                        .chat-close {
+                            background: none;
+                            border: none;
+                            color: var(--neutral-400);
+                            font-size: 24px;
+                            cursor: pointer;
+                            transition: color 0.3s ease;
+                        }
+
+                        .chat-close:hover {
+                            color: var(--primary-light);
+                        }
+
+                        .chat-body {
+                            flex: 1;
+                            padding: 15px;
+                            overflow-y: auto;
+                            display: flex;
+                            flex-direction: column;
+                            gap: 15px;
+                        }
+
+                        .chat-message {
+                            display: flex;
+                            flex-direction: column;
+                            max-width: 80%;
+                        }
+
+                        .chat-message.user {
+                            align-self: flex-end;
+                        }
+
+                        .chat-message.assistant {
+                            align-self: flex-start;
+                        }
+
+                        .message-content {
+                            padding: 10px 15px;
+                            border-radius: 12px;
+                            color: var(--primary-light);
+                        }
+
+                        .chat-message.user .message-content {
+                            background: linear-gradient(135deg, #6a0dad, #9370db);
+                        }
+
+                        .chat-message.assistant .message-content {
+                            background-color: var(--neutral-800);
+                            border: 1px solid rgba(255, 255, 255, 0.1);
+                        }
+
+                        .chat-input {
+                            display: flex;
+                            padding: 15px;
+                            border-top: 1px solid rgba(255, 255, 255, 0.1);
+                        }
+
+                        .chat-input input {
+                            flex: 1;
+                            padding: 10px 15px;
+                            border-radius: 20px;
+                            border: 1px solid rgba(255, 255, 255, 0.1);
+                            background-color: var(--neutral-800);
+                            color: var(--primary-light);
+                            outline: none;
+                        }
+
+                        .chat-input button {
+                            background: linear-gradient(135deg, #6a0dad, #9370db);
+                            border: none;
+                            width: 40px;
+                            height: 40px;
+                            border-radius: 50%;
+                            margin-left: 10px;
+                            color: white;
+                            cursor: pointer;
+                            transition: transform 0.3s ease;
+                        }
+
+                        .chat-input button:hover {
+                            transform: scale(1.1);
+                        }
+                    `;
+                    document.head.appendChild(style);
+                }
+
+                // Toggle chat modal
+                chatModal.classList.toggle('active');
+            });
+
+            // Function to send user message
+            function sendUserMessage() {
+                const userInput = document.getElementById('userInput');
+                const message = userInput.value.trim();
+
+                if (message) {
+                    // Add user message to chat
+                    addMessageToChat('user', message);
+
+                    // Clear input
+                    userInput.value = '';
+
+                    // Simulate assistant response (in a real app, this would call your backend)
+                    setTimeout(() => {
+                        const responses = [
+                            "I'm here to help you with your CRM needs. What would you like to know?",
+                            "You can manage your customers by going to the Customers section in the navigation.",
+                            "To create a new deal, navigate to the Deals section and click 'Add Deal'.",
+                            "Need help with something specific? Feel free to ask!",
+                            "You can view detailed analytics on your dashboard.",
+                            "Is there anything else I can help you with?"
+                        ];
+
+                        const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+                        addMessageToChat('assistant', randomResponse);
+                    }, 1000);
+                }
+            }
+
+            // Function to add message to chat
+            function addMessageToChat(sender, message) {
+                const chatBody = document.querySelector('.chat-body');
+                const messageElement = document.createElement('div');
+                messageElement.className = `chat-message ${sender}`;
+
+                messageElement.innerHTML = `
+                    <div class="message-content">
+                        <p>${message}</p>
+                    </div>
+                `;
+
+                chatBody.appendChild(messageElement);
+                chatBody.scrollTop = chatBody.scrollHeight;
+            }
+        });
+    </script>
+
+    {% block scripts %}{% endblock %}
+</body>
+</html>

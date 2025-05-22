@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}CRM System{% endblock %}</title>
+
+    <!-- Google Fonts - Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    {% block styles %}{% endblock %}
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="{{ url_for('main.index') }}" class="navbar-brand">
+                <i class="fas fa-chart-line"></i> CRM System
+            </a>
+
+            <div class="nav-links">
+                <a href="{{ url_for('main.dashboard') }}" class="nav-link">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
+                <a href="{{ url_for('customers.list_customers') }}" class="nav-link">
+                    <i class="fas fa-users"></i> Customers
+                </a>
+                <a href="{{ url_for('deals.list_deals') }}" class="nav-link">
+                    <i class="fas fa-handshake"></i> Deals
+                </a>
+                <a href="{{ url_for('auth.login') }}" class="nav-link">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </a>
+                <a href="{{ url_for('auth.register') }}" class="nav-link">
+                    <i class="fas fa-user-plus"></i> Register
+                </a>
+                <a href="{{ url_for('auth.logout') }}" class="nav-link">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3 class="footer-title">CRM System</h3>
+                    <p>A modern customer relationship management system designed for growing businesses.</p>
+                    <p>Streamline your sales process and boost customer engagement with our powerful tools.</p>
+                </div>
+                <div class="footer-section">
+                    <h3 class="footer-title">Quick Links</h3>
+                    <a href="{{ url_for('main.index') }}" class="footer-link">
+                        <i class="fas fa-home fa-fw"></i> Home
+                    </a>
+                    <a href="{{ url_for('main.dashboard') }}" class="footer-link">
+                        <i class="fas fa-tachometer-alt fa-fw"></i> Dashboard
+                    </a>
+                    <a href="{{ url_for('customers.list_customers') }}" class="footer-link">
+                        <i class="fas fa-users fa-fw"></i> Customers
+                    </a>
+                    <a href="{{ url_for('deals.list_deals') }}" class="footer-link">
+                        <i class="fas fa-handshake fa-fw"></i> Deals
+                    </a>
+                </div>
+                <div class="footer-section">
+                    <h3 class="footer-title">Resources</h3>
+                    <a href="{{ url_for('main.documentation') }}" class="footer-link">
+                        <i class="fas fa-book fa-fw"></i> Documentation
+                    </a>
+                    <a href="{{ url_for('main.api_reference') }}" class="footer-link">
+                        <i class="fas fa-code fa-fw"></i> API Reference
+                    </a>
+                    <a href="{{ url_for('main.blog') }}" class="footer-link">
+                        <i class="fas fa-rss fa-fw"></i> Blog
+                    </a>
+                    <a href="{{ url_for('main.community') }}" class="footer-link">
+                        <i class="fas fa-users fa-fw"></i> Community
+                    </a>
+                </div>
+                <div class="footer-section">
+                    <h3 class="footer-title">Tools</h3>
+                    <a href="{{ url_for('main.analytics') }}" class="footer-link">
+                        <i class="fas fa-chart-line fa-fw"></i> Analytics
+                    </a>
+                    <a href="{{ url_for('main.tasks') }}" class="footer-link">
+                        <i class="fas fa-tasks fa-fw"></i> Task Management
+                    </a>
+                </div>
+                <div class="footer-section">
+                    <h3 class="footer-title">Contact</h3>
+                    <p><i class="fas fa-envelope fa-fw"></i> support@crmsystem.com</p>
+                    <p><i class="fas fa-phone fa-fw"></i> +1 (234) 567-890</p>
+                    <p><i class="fas fa-map-marker-alt fa-fw"></i> 123 Business Ave, Suite 100<br>San Francisco, CA 94105</p>
+                </div>
+                <div class="footer-section">
+                    <h3 class="footer-title">Company</h3>
+                    <a href="{{ url_for('main.about') }}" class="footer-link">
+                        <i class="fas fa-info-circle fa-fw"></i> About Us
+                    </a>
+                    <a href="{{ url_for('main.careers') }}" class="footer-link">
+                        <i class="fas fa-briefcase fa-fw"></i> Careers
+                    </a>
+                    <a href="{{ url_for('main.privacy') }}" class="footer-link">
+                        <i class="fas fa-shield-alt fa-fw"></i> Privacy Policy
+                    </a>
+                    <a href="{{ url_for('main.terms') }}" class="footer-link">
+                        <i class="fas fa-file-contract fa-fw"></i> Terms & Conditions
+                    </a>
+                </div>
+            </div>
+            <p class="copyright">
+                © 2023 CRM System. All rights reserved.
+                <span class="social-icons">
+                    <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-facebook"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-linkedin"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-github"></i></a>
+                </span>
+            </p>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

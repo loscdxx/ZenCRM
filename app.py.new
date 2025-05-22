@@ -1,0 +1,40 @@
+import os
+from flask import Flask, render_template
+from config import config
+from models import init_app
+from blueprints.auth import auth_bp
+from blueprints.main import main_bp
+from blueprints.customer import customer_bp
+from blueprints.deal import deal_bp
+from utils.filters import register_filters
+
+def create_app(config_name='default'):
+    app = Flask(__name__)
+    app.config.from_object(config[config_name])
+
+    # Initialize extensions
+    init_app(app)
+
+    # Register custom Jinja2 filters
+    register_filters(app)
+
+    # Register blueprints
+    app.register_blueprint(auth_bp)
+    app.register_blueprint(main_bp)
+    app.register_blueprint(customer_bp)
+    app.register_blueprint(deal_bp)
+
+    # Error handlers
+    @app.errorhandler(404)
+    def page_not_found(e):
+        return render_template('errors/404.html'), 404
+
+    @app.errorhandler(500)
+    def internal_server_error(e):
+        return render_template('errors/500.html'), 500
+
+    return app
+
+if __name__ == '__main__':
+    app = create_app(os.environ.get('FLASK_CONFIG', 'development'))
+    app.run(debug=True)

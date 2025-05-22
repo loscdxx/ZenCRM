@@ -1,0 +1,266 @@
+{% extends 'base.html' %}
+
+{% block title %}Sales Forecast | ZenCRM{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="fw-bold mb-0">Sales Forecast</h1>
+        <p class="text-muted">Projected revenue based on deal probability</p>
+    </div>
+    <a href="{{ url_for('add_deal') }}" class="btn btn-primary">
+        <i class="fas fa-plus me-2"></i>Add Deal
+    </a>
+</div>
+
+{% if forecast %}
+<div class="row g-4">
+    <!-- Summary Card -->
+    <div class="col-12">
+        <div class="card mb-4">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4 text-center border-end">
+                        <h6 class="text-muted mb-1">Total Open Deals</h6>
+                        <h3 class="fw-bold">{{ forecast.values()|map(attribute='deals')|map('list')|map('length')|sum }}</h3>
+                    </div>
+                    <div class="col-md-4 text-center border-end">
+                        <h6 class="text-muted mb-1">Total Pipeline Value</h6>
+                        <h3 class="fw-bold">${{ "{:,.2f}".format(forecast.values()|map(attribute='total')|sum) }}</h3>
+                    </div>
+                    <div class="col-md-4 text-center">
+                        <h6 class="text-muted mb-1">Weighted Forecast</h6>
+                        <h3 class="fw-bold">${{ "{:,.2f}".format(forecast.values()|map(attribute='weighted')|sum) }}</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Monthly Forecast Cards -->
+    {% for month, data in forecast.items() %}
+    <div class="col-md-6 col-lg-4">
+        <div class="card h-100">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">{{ month }}</h5>
+                <span class="badge bg-primary">{{ data.deals|length }} Deals</span>
+            </div>
+            <div class="card-body">
+                <div class="d-flex justify-content-between mb-4">
+                    <div>
+                        <h6 class="text-muted mb-1">Total Value</h6>
+                        <h4 class="fw-bold">${{ "{:,.2f}".format(data.total) }}</h4>
+                    </div>
+                    <div class="text-end">
+                        <h6 class="text-muted mb-1">Weighted Value</h6>
+                        <h4 class="fw-bold">${{ "{:,.2f}".format(data.weighted) }}</h4>
+                    </div>
+                </div>
+                
+                <h6 class="mb-3">Deals</h6>
+                <div class="table-responsive">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>Deal</th>
+                                <th>Value</th>
+                                <th>Prob.</th>
+                                <th>Forecast</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for deal in data.deals %}
+                            <tr>
+                                <td>
+                                    <a href="{{ url_for('view_deal', deal_id=deal.id) }}" class="text-decoration-none">
+                                        {{ deal.title }}
+                                    </a>
+                                </td>
+                                <td>${{ "{:,.2f}".format(deal.value) }}</td>
+                                <td>{{ deal.probability }}%</td>
+                                <td>${{ "{:,.2f}".format(deal.forecast_value) }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="card">
+    <div class="card-body text-center py-5">
+        <i class="fas fa-chart-line fa-3x text-muted mb-3"></i>
+        <h4>No forecast data available</h4>
+        <p class="text-muted">Add deals with expected close dates to see your sales forecast</p>
+        <a href="{{ url_for('add_deal') }}" class="btn btn-primary mt-2">
+            <i class="fas fa-plus me-2"></i>Add Deal
+        </a>
+    </div>
+</div>
+{% endif %}
+{% endblock %}{% extends 'base.html' %}
+
+{% block title %}Sales Forecast - CRM System{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Sales Forecast</h1>
+    <a href="{{ url_for('add_deal') }}" class="btn btn-primary">
+        <i class="bi bi-plus-circle"></i> Add Deal
+    </a>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Monthly Forecast</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="forecastChart" height="100"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if forecast %}
+    {% for month, data in forecast.items() %}
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="mb-0">{{ month }}</h5>
+        </div>
+        <div class="card-body">
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <div class="card bg-light">
+                        <div class="card-body text-center">
+                            <h6 class="card-title">Total Value</h6>
+                            <h3 class="card-text">${{ "{:,.2f}".format(data.total) }}</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card bg-light">
+                        <div class="card-body text-center">
+                            <h6 class="card-title">Weighted Forecast</h6>
+                            <h3 class="card-text">${{ "{:,.2f}".format(data.weighted) }}</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Deal</th>
+                            <th>Customer</th>
+                            <th>Value</th>
+                            <th>Probability</th>
+                            <th>Forecast</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for deal in data.deals %}
+                        <tr>
+                            <td>{{ deal.title }}</td>
+                            <td>
+                                <a href="{{ url_for('view_customer', customer_id=deal.customer.id) }}">
+                                    {{ deal.customer.name }}
+                                </a>
+                            </td>
+                            <td>${{ "{:,.2f}".format(deal.value) }}</td>
+                            <td>{{ deal.probability }}%</td>
+                            <td>${{ "{:,.2f}".format(deal.forecast_value) }}</td>
+                            <td>
+                                {% if deal.status == 'Open' %}
+                                <span class="badge bg-primary">{{ deal.status }}</span>
+                                {% elif deal.status == 'Won' %}
+                                <span class="badge bg-success">{{ deal.status }}</span>
+                                {% else %}
+                                <span class="badge bg-danger">{{ deal.status }}</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a href="{{ url_for('view_deal', deal_id=deal.id) }}" class="btn btn-sm btn-info">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+{% else %}
+<div class="alert alert-info">
+    <p>No open deals found for forecasting. <a href="{{ url_for('add_deal') }}">Add a deal</a> to see your forecast.</p>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Prepare data for chart
+        const months = [];
+        const totalValues = [];
+        const weightedValues = [];
+        
+        {% for month, data in forecast.items() %}
+        months.push('{{ month }}');
+        totalValues.push({{ data.total }});
+        weightedValues.push({{ data.weighted }});
+        {% endfor %}
+        
+        const ctx = document.getElementById('forecastChart').getContext('2d');
+        const forecastChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: months,
+                datasets: [{
+                    label: 'Total Value',
+                    data: totalValues,
+                    backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }, {
+                    label: 'Weighted Forecast',
+                    data: weightedValues,
+                    backgroundColor: 'rgba(255, 159, 64, 0.5)',
+                    borderColor: 'rgba(255, 159, 64, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value) {
+                                return '$' + value.toLocaleString();
+                            }
+                        }
+                    }
+                },
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.dataset.label + ': $' + context.raw.toLocaleString();
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    });
+</script>
+{% endblock %}

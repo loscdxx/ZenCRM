@@ -1,0 +1,171 @@
+{% extends "base.html" %}
+
+{% block title %}Analytics - CRM System{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>Analytics Dashboard</h1>
+</div>
+
+<div class="content-section">
+    <div class="analytics-overview">
+        <h2>Performance Metrics</h2>
+        <p>Track your sales performance and customer engagement with our comprehensive analytics tools.</p>
+        
+        <div class="analytics-cards">
+            <div class="analytics-card">
+                <h3>Sales Performance</h3>
+                <div class="chart-placeholder">
+                    <i class="fas fa-chart-line fa-3x"></i>
+                    <p>Sales trend visualization</p>
+                </div>
+                <p>Monitor your sales performance over time with detailed charts and metrics.</p>
+            </div>
+            
+            <div class="analytics-card">
+                <h3>Customer Engagement</h3>
+                <div class="chart-placeholder">
+                    <i class="fas fa-users fa-3x"></i>
+                    <p>Customer engagement metrics</p>
+                </div>
+                <p>Track customer interactions and engagement levels across your CRM.</p>
+            </div>
+            
+            <div class="analytics-card">
+                <h3>Deal Pipeline</h3>
+                <div class="chart-placeholder">
+                    <i class="fas fa-funnel-dollar fa-3x"></i>
+                    <p>Pipeline visualization</p>
+                </div>
+                <p>Visualize your sales pipeline and identify bottlenecks in your process.</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="analytics-reports">
+        <h2>Custom Reports</h2>
+        <p>Generate custom reports based on your specific business needs:</p>
+        
+        <div class="report-options">
+            <div class="report-option">
+                <h3>Sales Reports</h3>
+                <ul>
+                    <li>Monthly sales summary</li>
+                    <li>Quarterly performance</li>
+                    <li>Year-over-year comparison</li>
+                    <li>Product/service breakdown</li>
+                </ul>
+                <button class="btn btn-primary">Generate Report</button>
+            </div>
+            
+            <div class="report-option">
+                <h3>Customer Reports</h3>
+                <ul>
+                    <li>Customer acquisition</li>
+                    <li>Customer retention</li>
+                    <li>Customer lifetime value</li>
+                    <li>Demographic analysis</li>
+                </ul>
+                <button class="btn btn-primary">Generate Report</button>
+            </div>
+            
+            <div class="report-option">
+                <h3>Team Performance</h3>
+                <ul>
+                    <li>Individual performance</li>
+                    <li>Team comparison</li>
+                    <li>Goal achievement</li>
+                    <li>Activity metrics</li>
+                </ul>
+                <button class="btn btn-primary">Generate Report</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block styles %}
+<style>
+    .analytics-cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 2rem;
+        margin: 2rem 0;
+    }
+    
+    .analytics-card {
+        background: rgba(10, 10, 20, 0.5);
+        border-radius: 12px;
+        padding: 1.5rem;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .analytics-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+    }
+    
+    .chart-placeholder {
+        height: 200px;
+        background: rgba(5, 5, 16, 0.5);
+        border-radius: 8px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        margin: 1rem 0;
+        color: var(--accent-purple);
+    }
+    
+    .chart-placeholder i {
+        margin-bottom: 1rem;
+        background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+    
+    .report-options {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 2rem;
+        margin: 2rem 0;
+    }
+    
+    .report-option {
+        background: rgba(10, 10, 20, 0.5);
+        border-radius: 12px;
+        padding: 1.5rem;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    
+    .report-option ul {
+        margin: 1rem 0;
+        padding-left: 1.5rem;
+    }
+    
+    .report-option li {
+        margin-bottom: 0.5rem;
+        color: var(--neutral-300);
+    }
+    
+    .page-header {
+        margin: 2rem 0;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    
+    .page-header h1 {
+        font-size: 2.5rem;
+        background: linear-gradient(135deg, var(--accent-purple-light), var(--accent-blue));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+    
+    .content-section {
+        margin-bottom: 4rem;
+    }
+</style>
+{% endblock %}

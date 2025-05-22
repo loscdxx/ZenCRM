@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block title %}Documentation - ZenCRM{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <div class="container">
+        <h1>Documentation</h1>
+        <p class="lead">Learn how to use ZenCRM effectively with our comprehensive documentation.</p>
+    </div>
+</section>
+
+<section class="content-section">
+    <div class="container">
+        <div class="documentation-grid">
+            <div class="doc-card">
+                <div class="doc-icon">
+                    <i class="fas fa-book"></i>
+                </div>
+                <h3>Getting Started</h3>
+                <p>Learn the basics of ZenCRM and set up your account for success.</p>
+                <a href="#" class="btn-link">Read Guide</a>
+            </div>
+            
+            <div class="doc-card">
+                <div class="doc-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <h3>Customer Management</h3>
+                <p>Learn how to effectively manage your customer database.</p>
+                <a href="#" class="btn-link">Read Guide</a>
+            </div>
+            
+            <div class="doc-card">
+                <div class="doc-icon">
+                    <i class="fas fa-handshake"></i>
+                </div>
+                <h3>Deal Tracking</h3>
+                <p>Master the deal pipeline and close more sales.</p>
+                <a href="#" class="btn-link">Read Guide</a>
+            </div>
+            
+            <div class="doc-card">
+                <div class="doc-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <h3>Analytics & Reporting</h3>
+                <p>Get insights from your data with powerful reporting tools.</p>
+                <a href="#" class="btn-link">Read Guide</a>
+            </div>
+            
+            <div class="doc-card">
+                <div class="doc-icon">
+                    <i class="fas fa-cogs"></i>
+                </div>
+                <h3>Customization</h3>
+                <p>Tailor ZenCRM to fit your specific business needs.</p>
+                <a href="#" class="btn-link">Read Guide</a>
+            </div>
+            
+            <div class="doc-card">
+                <div class="doc-icon">
+                    <i class="fas fa-plug"></i>
+                </div>
+                <h3>Integrations</h3>
+                <p>Connect ZenCRM with your favorite tools and services.</p>
+                <a href="#" class="btn-link">Read Guide</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="faq-section">
+    <div class="container">
+        <h2>Frequently Asked Questions</h2>
+        
+        <div class="faq-item">
+            <h3>How do I import my existing customer data?</h3>
+            <p>ZenCRM supports CSV imports for customer data. Go to Customers > Import and follow the instructions to map your data fields.</p>
+        </div>
+        
+        <div class="faq-item">
+            <h3>Can I customize the deal stages?</h3>
+            <p>Yes, you can customize deal stages in Settings > Deal Pipeline. You can add, remove, or reorder stages to match your sales process.</p>
+        </div>
+        
+        <div class="faq-item">
+            <h3>How do I add team members to my account?</h3>
+            <p>Go to Settings > Team Members and click "Add Team Member". Enter their email address and select their role to send an invitation.</p>
+        </div>
+        
+        <div class="faq-item">
+            <h3>Is there a mobile app available?</h3>
+            <p>Yes, ZenCRM has mobile apps for both iOS and Android. You can download them from the respective app stores.</p>
+        </div>
+    </div>
+</section>
+{% endblock %}

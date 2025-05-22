@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="40px" height="40px" viewBox="0 0 40 40" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>Detailed Purple Cobra</title>
+    <defs>
+        <linearGradient id="cobra-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#4a0072;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#9370db;stop-opacity:1" />
+        </linearGradient>
+        <linearGradient id="head-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#6a0dad;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#9370db;stop-opacity:1" />
+        </linearGradient>
+    </defs>
+
+    <!-- Background -->
+    <circle cx="20" cy="20" r="19" fill="url(#cobra-gradient)"/>
+
+    <!-- Cobra Head Shape - Smoother, No Side Edges -->
+    <path d="M 20,5 C 16,8 12,12 10,16 C 8,20 8,24 10,28 C 12,32 16,34 20,35 C 24,34 28,32 30,28 C 32,24 32,20 30,16 C 28,12 24,8 20,5 Z"
+          fill="url(#head-gradient)" stroke="#4b0082" stroke-width="1"/>
+
+    <!-- Cobra Neck Pattern -->
+    <path d="M 15,28 C 16,30 18,31 20,31 C 22,31 24,30 25,28"
+          stroke="#4b0082" stroke-width="0.5" fill="none"/>
+    <path d="M 14,25 C 16,27 18,28 20,28 C 22,28 24,27 26,25"
+          stroke="#4b0082" stroke-width="0.5" fill="none"/>
+    <path d="M 13,22 C 15,24 18,25 20,25 C 22,25 25,24 27,22"
+          stroke="#4b0082" stroke-width="0.5" fill="none"/>
+
+    <!-- Cobra Eyes - Angry Slant -->
+    <path d="M 14,16 L 17,18 L 14,20" fill="#ffff00" stroke="#000000" stroke-width="0.5"/>
+    <path d="M 26,16 L 23,18 L 26,20" fill="#ffff00" stroke="#000000" stroke-width="0.5"/>
+
+    <!-- Cobra Eye Details -->
+    <path d="M 15,18 L 16,18 L 15,19 Z" fill="#000000"/>
+    <path d="M 25,18 L 24,18 L 25,19 Z" fill="#000000"/>
+
+    <!-- Cobra Nostrils -->
+    <ellipse cx="19" cy="22" rx="0.5" ry="0.8" fill="#4b0082"/>
+    <ellipse cx="21" cy="22" rx="0.5" ry="0.8" fill="#4b0082"/>
+
+    <!-- Cobra Fangs -->
+    <path d="M 18,24 L 17,27 L 19,25" fill="#ffffff" stroke="#000000" stroke-width="0.5"/>
+    <path d="M 22,24 L 23,27 L 21,25" fill="#ffffff" stroke="#000000" stroke-width="0.5"/>
+
+    <!-- Cobra Tongue -->
+    <path d="M 20,25 L 18,29 L 20,27 L 22,29 L 20,25" fill="#ff0000" stroke="#800000" stroke-width="0.5"/>
+
+    <!-- Head Scales/Details -->
+    <path d="M 20,10 C 18,12 17,14 17,16 C 19,15 21,15 23,16 C 23,14 22,12 20,10 Z"
+          stroke="#4b0082" stroke-width="0.5" fill="none"/>
+    <path d="M 15,16 C 14,18 14,20 15,22 C 16,21 17,20 18,20 C 17,19 16,17 15,16 Z"
+          stroke="#4b0082" stroke-width="0.5" fill="none"/>
+    <path d="M 25,16 C 26,18 26,20 25,22 C 24,21 23,20 22,20 C 23,19 24,17 25,16 Z"
+          stroke="#4b0082" stroke-width="0.5" fill="none"/>
+</svg>
